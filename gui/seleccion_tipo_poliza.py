@@ -21,6 +21,7 @@ class Seleccion_tipo_poliza():
         
         #print(polizaDTO)
         self.sumar_seis_meses_str() 
+        self.innit_fechaInicio()
         self.btnConfirmar()
         self.btnVolver()
         self.seleccion_tipo_poliza.show()
@@ -48,10 +49,9 @@ class Seleccion_tipo_poliza():
             else:
                 pass
             
-            self.datosPoliza.fechaInicioVigencia = self.seleccion_tipo_poliza.txtFechaInicioVigencia.text()
+            self.datosPoliza.fechaInicioVigencia = self.innit_fechaInicio()
             self.datosPoliza.fechaFinVigencia = self.sumar_seis_meses_str()
             self.datosPoliza.formaPago = self.seleccion_tipo_poliza.cbFormaPago.currentText()
-            
         except Exception as e:
             print(f"Error en recuperacion: {e}")
       
@@ -69,6 +69,7 @@ class Seleccion_tipo_poliza():
             print(f"Error en muestra: {e}")    
 
     def btnConfirmar(self):
+        print(self.datosPoliza)
         self.seleccion_tipo_poliza.btnConfirmar.clicked.connect(self.recuperarDatosPoliza)
         self.seleccion_tipo_poliza.btnConfirmar.clicked.connect(self.IngConfirmacion_poliza)
     
@@ -87,7 +88,19 @@ class Seleccion_tipo_poliza():
             return fecha_resultado
         
         except Exception as e:
-            print(f"Error en fecha2: {e}")
+            print(f"Error en seleccion_tipo_poliza fecha 1: {e}")
+    
+    def innit_fechaInicio(self):
+        try:
+            fecha_actual = datetime.now()
+            fecha_resultado = fecha_actual + relativedelta(days=1)
+            fecha_formateada = fecha_resultado.strftime('%d/%m/%Y')
+            self.seleccion_tipo_poliza.txtFechaInicioVigencia.setText(fecha_formateada)
+            
+            return fecha_formateada
+        
+        except Exception as e:
+            print(f"Error en seleccion_tipo_poliza fecha 2: {e}")
             
     def finalizar(self):
         self.ingreso_datos_poliza.finalizar()

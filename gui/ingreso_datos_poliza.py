@@ -23,6 +23,8 @@ class Ingreso_datos_poliza():
         self.initComboBox_Marcas()
         self.comboBoxMarca_changed()
         self.comboBoxModelo_changed()
+        self.comboBoxAnioVehiculo_changed()
+        self.initSumaAsegurada()
         self.initcomboBox_NroSiniestro()
         self.initcomboBox_Hijos()
         self.recuperarDatosPoliza()
@@ -56,9 +58,11 @@ class Ingreso_datos_poliza():
         try:
             gestor = GestorSis()
             filtro = ProvinciaDTO()
-            lista_provicias = gestor.listar_provincias(filtro)
+            lista_provincias = gestor.listar_provincias(filtro)
 
-            for provincia in lista_provicias:
+            lista_provincias_ordenada = sorted(lista_provincias, key=lambda x: x.nombre)
+            
+            for provincia in lista_provincias_ordenada:
                 self.ingreso_datos_poliza.cbProvincia.addItem(provincia.nombre)
             
         except Exception as e:
@@ -79,7 +83,9 @@ class Ingreso_datos_poliza():
             gestor = GestorSis()
             lista_localidades = gestor.listar_localidades(provinciaSeleccionada)
 
-            for localidad in lista_localidades:
+            lista_localidades_ordenada = sorted(lista_localidades, key=lambda x: x.nombre)
+            
+            for localidad in lista_localidades_ordenada:
                 self.ingreso_datos_poliza.cbLocalidad.addItem(localidad.nombre)
             
         except Exception as e:
@@ -90,8 +96,10 @@ class Ingreso_datos_poliza():
             gestor = GestorSis()
             filtro = MarcaDTO()
             lista_marcas = gestor.listar_marcas(filtro)
-
-            for marca in lista_marcas:
+            
+            lista_marcas_ordenada = sorted(lista_marcas, key=lambda x: x.nombre)
+            
+            for marca in lista_marcas_ordenada:
                 self.ingreso_datos_poliza.cbMarcaVehiculo.addItem(marca.nombre)
             
         except Exception as e:
@@ -112,8 +120,10 @@ class Ingreso_datos_poliza():
         try:
             gestor = GestorSis()
             lista_modelos = gestor.listar_modelos(marcaSeleccionada)
-
-            for modelos in lista_modelos:
+            
+            lista_modelo_ordenada = sorted(lista_modelos, key=lambda x: x.nombre)
+            
+            for modelos in lista_modelo_ordenada:
                 self.ingreso_datos_poliza.cbModeloVehiculo.addItem(modelos.nombre)
             
         except Exception as e:
@@ -138,7 +148,27 @@ class Ingreso_datos_poliza():
                 self.ingreso_datos_poliza.cbAnioVehiculo.addItem(f"{anios}")
         except Exception as e:
             print(f"Error en initcomboBox_Anno(): {e}")
-            
+    
+    def comboBoxAnioVehiculo_changed(self):
+        try:
+            self.ingreso_datos_poliza.cbAnioVehiculo.activated.connect(self.initSumaAsegurada)
+        except Exception as e:
+            print(f"Error en prueba(): {e}") 
+    
+    def initSumaAsegurada(self):
+        
+        anioSeleccionado = self.ingreso_datos_poliza.cbModeloVehiculo.currentText()
+        if (anioSeleccionado != "--- Seleccione una opción"):
+            try:
+                gestor = GestorSis()
+                suma = gestor.recuperar_SumaAsegurada()
+                self.ingreso_datos_poliza.txtSumaAsegurada.setText(f"{suma}")
+                
+            except Exception as e:
+                print(f"Error en initSumaAsegurada(): {e}")
+        else:
+            pass
+        
     def btnAgregar(self):
         self.ingreso_datos_poliza.btnAgregar.clicked.connect(self.agregarHijo)
         

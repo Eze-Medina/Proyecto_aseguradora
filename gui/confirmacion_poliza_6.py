@@ -46,13 +46,9 @@ class Confirmacion_poliza_6():
         self.confirmacion_poliza_6.btnImprimir.clicked.connect(self.guardar)
     
     def guardar(self):
-        
-        try:
-            gestor = GestorSis()
-            gestor.guardar_Poliza(self.datosPoliza,self.datosCliente)
-        except Exception as e:
-            print(f"Error en interfaz: {e}")
-            self.finalizar()
+        gestor = GestorSis()
+        gestor.guardar_Poliza(self.datosPoliza,self.datosCliente)
+        self.finalizar()
             
     def sumar_seis_meses_str(self):
         try:

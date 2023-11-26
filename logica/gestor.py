@@ -71,6 +71,9 @@ class GestorSis():
             modRES=modeloDTO(nombre=modelo.nombre)
             listaRES.append(modRES)           
         return listaRES
+    
+    def recuperar_SumaAsegurada(self):
+        return 15000
         
     def listar_estadoCivil(self):
         estadDAO=estadoCivilDAO()

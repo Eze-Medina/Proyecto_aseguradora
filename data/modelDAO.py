@@ -313,8 +313,8 @@ class polizaDAO():
                 
         # CREACION DE OBJETO: CUOTAS
         try:
-            datetime_object = polizaDTO.fechaInicioVigencia
-            cuota_time = datetime_object - timedelta(days=1)
+            fecha_fin_str = polizaDTO.fechaFinVigencia
+            cuota_time = fecha_fin_str - timedelta(days=1)
         
             if polizaDTO.formaPago=="Semestral":
                 nueva_cuota = cuotas(idCuota=newIdCuota,
@@ -325,9 +325,30 @@ class polizaDAO():
                                     importeFinal=2000
                 )
                 session.add(nueva_cuota)
-            else:
-                pass 
+                
+            elif polizaDTO.formaPago=="Mensual":
+                
+                fecha_inicio_str = polizaDTO.fechaInicioVigencia
+                datetime_object = datetime.strptime(fecha_inicio_str, '%d/%m/%Y')
+
+                
+
+                for i in range(1, 7):
+                    cuota_time = datetime_object + relativedelta(months=1)
+                    
+                    nueva_cuota = cuotas(idCuota=newIdCuota,
+                                        idPoliza=newIdPoliza,
+                                        cuotaNro=i,
+                                        fechaVencimiento=cuota_time,
+                                        premio=1000,
+                                        importeFinal=2000
+                    )
+                    datetime_object = cuota_time
+                    newIdCuota += 1
+                    session.add(nueva_cuota)
+            
             session.commit()
+            
         except Exception as e:
             print(f"Error en CUOTAS(): {e}")
         
