@@ -230,6 +230,9 @@ class polizaDAO():
         newIdCuota = session.query(func.max(cuotas.idCuota)).scalar()
         newIdCuota += 1
         
+        newIdVehiculo = session.query(func.max(vehiculo.idVehiculo)).scalar()
+        newIdVehiculo += 1
+        
         # CREACION DE OBJETOS: POLIZA SEGURIDAD
         try:
             for medida in polizaDTO.medidas:
@@ -249,7 +252,7 @@ class polizaDAO():
             nueva_poliza = poliza(
                 idPoliza=newIdPoliza,
                 idCliente=clienteDTO.idCliente,
-                patente=polizaDTO.patente,
+                idVehiculo=newIdVehiculo,
                 idTipoCobertura=polizaDTO.tipoCobertura,
                 estadoPoliza="Suspendida",
                 fechaInicio=fechaInicio,
@@ -274,6 +277,7 @@ class polizaDAO():
             idSini = session.query(cantSiniestros).filter_by(cantidad=polizaDTO.cantSiniestros).first()
             print(idModelo.idModelo)
             nuevo_vehiculo = vehiculo(patente=polizaDTO.patente,
+                                    idVehiculo=newIdVehiculo,
                                     idModelo=idModelo.idModelo,
                                     idSiniestros=idSini.idSiniestros,
                                     idFactorKm=idFactor,

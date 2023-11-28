@@ -16,7 +16,7 @@ class poliza(Base):
     idPoliza = Column(Integer(),primary_key=True)
     idCliente = Column(Integer, ForeignKey('cliente.idCliente'))
     idTipoCobertura = Column(Integer, ForeignKey('tipoCobertura.idTipoCobertura'))
-    patente = Column(Integer, ForeignKey('vehiculo.patente'))
+    idVehiculo = Column(Integer, ForeignKey('vehiculo.idVehiculo'))
     estadoPoliza = Column(String(50))
     fechaInicio = Column(DateTime())
     fechaFin = Column(DateTime())
@@ -294,7 +294,8 @@ class tipoCobertura(Base):
 class vehiculo(Base):
     __tablename__ = 'vehiculo'
     
-    patente = Column(String(50),primary_key=True)
+    idVehiculo = Column(Integer(),primary_key=True)
+    patente = Column(String(50))
     idModelo = Column(Integer, ForeignKey('modelo.idModelo'))
     idFactorKm = Column(Integer, ForeignKey('factorKm.idFactorKm'))
     idSiniestros = Column(Integer, ForeignKey('cantSiniestros.idSiniestros'))

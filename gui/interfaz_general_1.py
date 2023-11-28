@@ -4,14 +4,14 @@ from logica.gestor import GestorSis
 
 class Interfaz_general_1():
     def __init__(self):
-        self.interfaz_general_1 = uic.loadUi("gui/interfaz_general_1.ui")
+        self.interfaz = uic.loadUi("gui/interfaz_general_1.ui")
         self.btnAltaPoliza()
-        self.interfaz_general_1.show()
+        self.interfaz.show()
 
     def btnAltaPoliza(self):
-        self.interfaz_general_1.btnAltaPoliza.clicked.connect(self.IngAltaPoliza)
+        self.interfaz.btnAltaPoliza.clicked.connect(self.IngAltaPoliza)
     
     def IngAltaPoliza(self):
         self.busqueda_cliente = Busqueda_cliente(self)
-        self.interfaz_general_1.hide()
+        self.interfaz.hide()
         

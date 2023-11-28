@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Confirmación de Póliza</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -40,6 +40,7 @@
    <property name="font">
     <font>
      <pointsize>10</pointsize>
+     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -67,6 +68,7 @@ border-radius: 8px;
    <property name="font">
     <font>
      <pointsize>10</pointsize>
+     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -728,6 +730,7 @@ border-radius: 8px;
      <font>
       <family>Segoe UI Semibold</family>
       <pointsize>14</pointsize>
+      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -768,6 +771,7 @@ border-radius: 8px;
     <font>
      <family>Segoe UI Semibold</family>
      <pointsize>14</pointsize>
+     <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>

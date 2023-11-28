@@ -8,22 +8,22 @@ from model.modelDTO import ClienteDTO
 
 class Busqueda_cliente():
     def __init__(self,interfaz_general_1):
-        self.busqueda_cliente = uic.loadUi("gui/busqueda_cliente.ui")
+        self.interfaz = uic.loadUi("gui/busqueda_cliente.ui")
         self.interfaz_general_1=interfaz_general_1
         self.btnBuscar()
         self.btnSeleccionar()
         self.btnVolver()
-        self.busqueda_cliente.show()
+        self.interfaz.show()
         
     
            
     def btnSeleccionar(self):
-        self.busqueda_cliente.btnSeleccionar.clicked.connect(self.IngDatosPoliza)
+        self.interfaz.btnSeleccionar.clicked.connect(self.IngDatosPoliza)
 
     def IngDatosPoliza(self):
         
-        fila_seleccionada = self.busqueda_cliente.tableDatosClientes.currentRow()
-        item = self.busqueda_cliente.tableDatosClientes.item(fila_seleccionada, 0)
+        fila_seleccionada = self.interfaz.tableDatosClientes.currentRow()
+        item = self.interfaz.tableDatosClientes.item(fila_seleccionada, 0)
         dato = int(item.text())
         
         gestor=GestorSis()
@@ -32,25 +32,25 @@ class Busqueda_cliente():
 
         try:
             self.ingreso_datos_poliza = Ingreso_datos_poliza(self,clienteDTO)
-            self.busqueda_cliente.hide()
+            self.interfaz.hide()
         except Exception as e:
             print(f"Error: {e}")
         
     def btnBuscar(self):
-        self.busqueda_cliente.btnBuscar.clicked.connect(self.listar)
+        self.interfaz.btnBuscar.clicked.connect(self.listar)
     
     def listar(self):
         try:
             gestor = GestorSis()
             
-            filtro = ClienteDTO(idCliente=self.busqueda_cliente.txtNumero.text(),
-                             numeroDocumento=self.busqueda_cliente.txtDocumento.text(),
-                             nombre=self.busqueda_cliente.txtNombre.text(),
-                             apellido=self.busqueda_cliente.txtApellido.text())
+            filtro = ClienteDTO(idCliente=self.interfaz.txtNumero.text(),
+                             numeroDocumento=self.interfaz.txtDocumento.text(),
+                             nombre=self.interfaz.txtNombre.text(),
+                             apellido=self.interfaz.txtApellido.text())
 
             lista_clientes = gestor.listar_clientes(filtro)
             
-            rowCount = self.busqueda_cliente.tableDatosClientes.rowCount()
+            rowCount = self.interfaz.tableDatosClientes.rowCount()
 
             for i, cliente in enumerate(lista_clientes):
                 self.centrar_elemento(i, 0, str(cliente.idCliente))
@@ -67,12 +67,12 @@ class Busqueda_cliente():
     def centrar_elemento(self, row, column, text):
         elemento = QTableWidgetItem(text)
         elemento.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.busqueda_cliente.tableDatosClientes.setItem(row, column, elemento)
+        self.interfaz.tableDatosClientes.setItem(row, column, elemento)
         
     def btnVolver(self):
-        self.busqueda_cliente.btnVolver.clicked.connect(self.volver)
+        self.interfaz.btnVolver.clicked.connect(self.volver)
         
     def volver(self):
-        self.interfaz_general_1.interfaz_general_1.show()
-        self.busqueda_cliente.close()
+        self.interfaz_general_1.interfaz.show()
+        self.interfaz.close()
         

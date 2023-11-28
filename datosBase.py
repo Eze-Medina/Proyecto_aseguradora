@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from model.models import Base, tipoDocumento, cliente, pais, provincia, localidad, vivienda, marca, modelo, factoresUniversales, cuotas
-from model.models import cantSiniestros, tipoCobertura, medidaDeSeguridad, hijo, poliza, estadoCivil, factorKm, poliza_Seguridad
+from model.models import cantSiniestros, tipoCobertura, medidaDeSeguridad, hijo, poliza, estadoCivil, factorKm, poliza_Seguridad, vehiculo
 
 engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
     
@@ -172,6 +172,9 @@ try:
    
     hijo_base=hijo(idHijo=0)
     session.add(hijo_base) 
+    
+    vehiculo_base=vehiculo(idVehiculo=0)
+    session.add(vehiculo_base) 
     
     poliza_base=poliza_Seguridad(idPolizaSeguridad=0)
     session.add(poliza_base)
