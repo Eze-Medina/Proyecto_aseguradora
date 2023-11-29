@@ -129,9 +129,9 @@
   <widget class="QLabel" name="txtAviso">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>20</x>
      <y>30</y>
-     <width>421</width>
+     <width>401</width>
      <height>91</height>
     </rect>
    </property>
@@ -150,13 +150,22 @@
     <enum>Qt::LeftToRight</enum>
    </property>
    <property name="text">
-    <string>Póliza generada exitosamente.</string>
+    <string>Poliza generada exitosamente</string>
    </property>
    <property name="textFormat">
     <enum>Qt::RichText</enum>
    </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+   <property name="margin">
+    <number>1</number>
    </property>
   </widget>
   <widget class="QPushButton" name="btnAceptar">

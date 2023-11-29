@@ -163,7 +163,7 @@ class Ingreso_datos_poliza():
             try:
                 gestor = GestorSis()
                 suma = gestor.recuperar_SumaAsegurada()
-                self.interfaz.txtSumaAsegurada.setText(f": {suma}")
+                self.interfaz.txtSumaAsegurada.setText(f"{suma}")
                 
             except Exception as e:
                 print(f"Error en initSumaAsegurada(): {e}")
@@ -218,6 +218,10 @@ class Ingreso_datos_poliza():
             self.datosPoliza.kilometrosAnio=int(self.interfaz.txtKilometrosAnio.text())
             self.datosPoliza.cantSiniestros=self.interfaz.cbNumeroSiniestros.currentText()
             
+            print(self.datosPoliza)
+        except Exception as e:
+            print(f"Error en recuperacion1: {e}")
+        try:    
             self.datosPoliza.medidas.clear()
             
             if self.interfaz.chbGaraje.isChecked():
@@ -237,8 +241,10 @@ class Ingreso_datos_poliza():
             else:
                 pass
             
+            print(self.datosPoliza)
         except Exception as e:
-            print(f"Error en recuperacion: {e}")
+            print(f"Error en recuperacion2: {e}")    
+        
 
     def vaciarLista(self):
         self.datosPoliza.hijos.clear()
@@ -248,7 +254,6 @@ class Ingreso_datos_poliza():
         try:
             if self.verificar():
                 self.recuperarDatosPoliza()
-                print(self.datosPoliza)
                 self.seleccion_tipo_poliza = Seleccion_tipo_poliza(self,self.datosCliente,self.datosPoliza)
                 self.interfaz.hide()
             else:
@@ -256,6 +261,7 @@ class Ingreso_datos_poliza():
                     self.aviso=Aviso(self,'Completar los datos por favor')
                 except Exception as e:
                     print(f"Error: {e}")   
+                    self.aviso=Aviso(self,f'Error: {e}')
         except Exception as e:
             print(f"Error: {e}")
 

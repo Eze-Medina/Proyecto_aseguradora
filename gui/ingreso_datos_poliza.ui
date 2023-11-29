@@ -418,12 +418,12 @@ border-radius: 8px;
       <rect>
        <x>30</x>
        <y>170</y>
-       <width>101</width>
+       <width>171</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Suma Asegurada</string>
+      <string>Suma Asegurada                         :</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="txtChasis">
@@ -990,14 +990,14 @@ border-radius: 8px;
     <widget class="QLabel" name="txtSumaAsegurada">
      <property name="geometry">
       <rect>
-       <x>190</x>
+       <x>200</x>
        <y>170</y>
        <width>101</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>: 0</string>
+      <string>0</string>
      </property>
     </widget>
    </widget>

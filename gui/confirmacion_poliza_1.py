@@ -21,26 +21,28 @@ class Confirmacion_poliza_1():
             self.interfaz.txtMotor.setText(f"{polizaDTO.motor}")
             self.interfaz.txtChasis.setText(f"{polizaDTO.chasis}")
             self.interfaz.txtSumaAsegurada.setText(f"{polizaDTO.sumaAsegurada}")
-            self.interfaz.txtImportesPorDescuentos.setText("1000")
-            self.interfaz.txtPremio.setText("1000")
+            self.interfaz.txtImportesPorDescuentos.setText(f"{100:.2f}")
+            self.interfaz.txtPremio.setText(f"{1000:.2f}")
             self.interfaz.txtFechaInicio.setText(f"{polizaDTO.fechaInicioVigencia}")
-            self.interfaz.txtUltimoPago.setText("1000")
-            self.interfaz.txtMontoAbonar.setText("1000")
+            
+            self.interfaz.txtMontoAbonar.setText(f"{900:.2f}")
             
         except Exception as e:
             print(f"Error en muestra: {e}")
         print(polizaDTO)
-        self.sumar_seis_meses_str()   
+        self.initFechas()   
         self.btnVolver()
         self.btnImprimir()
         self.interfaz.show()
     
-    def sumar_seis_meses_str(self):
+    def initFechas(self):
         try:
             fechaFin = self.datosPoliza.fechaInicioVigencia
             datetime_object = datetime.strptime(fechaFin, '%d/%m/%Y').date()
             fecha_resultado = datetime_object + relativedelta(months=6)
             self.interfaz.txtFechaFin.setText(f"{fecha_resultado.day}/{fecha_resultado.month}/{fecha_resultado.year}")
+            fecha_resultado = datetime_object - relativedelta(days=1)
+            self.interfaz.txtUltimoPago.setText(f"{fecha_resultado.day}/{fecha_resultado.month}/{fecha_resultado.year}")
             
         except Exception as e:
             print(f"Error en fecha3: {e}")
@@ -63,10 +65,5 @@ class Confirmacion_poliza_1():
     def finalizar(self):
         self.seleccion_tipo_poliza.finalizar()
         self.interfaz.close()
-    
-    
-             
-    
-            
     
             
