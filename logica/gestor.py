@@ -7,18 +7,23 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 class GestorSis():
     def listar_clientes(self, clienteDTO: ClienteDTO):
-        cliDAO=clienteDAO()
-        lista=cliDAO.listar_clientes(clienteDTO)
-        listaRES=[]
-        for cliente in lista:
-            clienteRES=ClienteDTO(idCliente=cliente.idCliente,
-                             numeroDocumento=cliente.numeroDocumento,
-                             nombre=cliente.nombre,
-                             apellido=cliente.apellido,
-                             tipoDocumento = cliente.tipo_documento.tipoDocumento)
-            listaRES.append(clienteRES)
-        return listaRES
-    
+        try:
+            cliDAO=clienteDAO()
+            print(clienteDTO)
+            lista=cliDAO.listar_clientes(clienteDTO)
+            listaRES=[]
+            for cliente in lista:
+                clienteRES=ClienteDTO(idCliente=cliente.idCliente,
+                                numeroDocumento=cliente.numeroDocumento,
+                                nombre=cliente.nombre,
+                                apellido=cliente.apellido,
+                                tipoDocumento = cliente.tipo_documento.tipoDocumento)
+                listaRES.append(clienteRES)
+            return listaRES
+        
+        except Exception as e:
+            print(f"Error en gestor en funcion listar_cliente: {e}")
+           
     def buscar_cliente(self, clienteDTO: ClienteDTO):
         cliDAO=clienteDAO()
         cliente=cliDAO.buscar_cliente(clienteDTO)
@@ -202,18 +207,10 @@ class GestorSis():
         except Exception as e:
             print(f"Error en CUOTAS(): {e}")
 
-        
-          
-    # def AAAAAAAA(self):
-    #     print("------------------------------------------------------------------------------------------------------------")
-    #     dao=DAO()
-    #     poliza=dao.prueba()
-    #     print(poliza)
-    #     print(poliza.vehiculo)
-    #     for hijo in poliza.hijo: 
-    #          print(hijo," ",hijo.estadoCivil)
-        
-        
-            
-        
-                
+    def listar_documentos(self):
+        try: 
+            documentos = clienteDAO()
+            tiposDocumentos = documentos.listar_documentos()
+            return tiposDocumentos
+        except Exception as e:
+            print(f"Error en gestor: {e}") 

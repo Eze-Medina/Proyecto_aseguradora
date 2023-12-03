@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker, joinedload
 from sqlalchemy import create_engine, select, func, insert, desc
 from sqlalchemy.sql.functions import coalesce
-from model.models import cuotas,cliente, provincia, marca, localidad, modelo, estadoCivil, cantSiniestros, poliza, vehiculo, medidaDeSeguridad, tipoCobertura, hijo, poliza_Seguridad, factorKm
+from model.models import cuotas,cliente, provincia, marca, localidad, modelo, estadoCivil, cantSiniestros, poliza, vehiculo, medidaDeSeguridad, tipoCobertura, hijo, poliza_Seguridad, factorKm, tipoDocumento
 from model.modelDTO import ClienteDTO, ProvinciaDTO, MarcaDTO, polizaDTO, hijoDTO
 from dateutil.relativedelta import relativedelta
 
@@ -23,16 +23,31 @@ class clienteDAO():
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
-        try:   
-            resultados = session.query(cliente).options(joinedload(cliente.tipo_documento)).all()
+        
+        try:
+            query = session.query(cliente).options(joinedload(cliente.tipo_documento), joinedload(cliente.vivienda))
+
+            filtros = {}
+            if clienteDTO.idCliente:
+                filtros['idCliente'] = clienteDTO.idCliente
+            if clienteDTO.numeroDocumento:
+                filtros['numeroDocumento'] = clienteDTO.numeroDocumento
+            if clienteDTO.nombre:
+                filtros['nombre'] = clienteDTO.nombre
+            if clienteDTO.apellido:
+                filtros['apellido'] = clienteDTO.apellido
+            if clienteDTO.tipoDocumento:
+                documento = session.query(tipoDocumento).filter_by(tipoDocumento=clienteDTO.tipoDocumento).first()
+                if documento:
+                    filtros['idDocumento'] = documento.idDocumento
+
+            cliente_encontrado = query.filter_by(**filtros).all()
+            
         except Exception as e:
-            print(f"Error en listarclientesDAO(): {e}") 
-        if resultados:
-            session.close()
-            return resultados
-        else:
-            session.close()
-            return None
+            print(f"Error en DAO listar_cliente(): {e}")
+
+        session.close()
+        return cliente_encontrado
 
     def buscar_cliente(self, clienteDTO: ClienteDTO):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
@@ -56,6 +71,20 @@ class clienteDAO():
         session.close()
         return cliente_encontrado
     
+    def listar_documentos(self):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+            
+        try:
+           documentos = session.query(tipoDocumento).all()
+            
+        except Exception as e:
+            print(f"Error en listado de documentos en DAO(): {e}")
+
+        session.close()
+        return documentos
+        
 class provinciaDAO():
     def listar_provincias(self, provinciaDTO: ProvinciaDTO):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)

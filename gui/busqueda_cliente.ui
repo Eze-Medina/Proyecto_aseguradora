@@ -40,7 +40,6 @@
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -68,7 +67,6 @@ border-radius: 8px;
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -93,10 +91,15 @@ border-radius: 8px;
      <height>31</height>
     </rect>
    </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16777215</height>
+    </size>
+   </property>
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -293,9 +296,9 @@ border-radius: 8px;
    <widget class="QTableWidget" name="tableDatosClientes">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>180</y>
-      <width>881</width>
+      <width>901</width>
       <height>331</height>
      </rect>
     </property>
@@ -418,45 +421,6 @@ border-radius: 8px;
     <string>Mostrar</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox10">
-   <property name="geometry">
-    <rect>
-     <x>90</x>
-     <y>620</y>
-     <width>31</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>10</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox20">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>620</y>
-     <width>31</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>20</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox30">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>620</y>
-     <width>31</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>30</string>
-   </property>
-  </widget>
   <widget class="QFrame" name="frame_3">
    <property name="geometry">
     <rect>
@@ -480,7 +444,7 @@ border-radius: 8px;
    <property name="geometry">
     <rect>
      <x>-20</x>
-     <y>-30</y>
+     <y>-40</y>
      <width>1031</width>
      <height>80</height>
     </rect>
@@ -507,7 +471,6 @@ border-radius: 8px;
      <font>
       <family>Segoe UI Semibold</family>
       <pointsize>14</pointsize>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -515,6 +478,116 @@ border-radius: 8px;
      <string>Búsqueda de Clientes</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QRadioButton" name="rb10">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>620</y>
+     <width>31</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>10</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="rb20">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>620</y>
+     <width>31</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>20</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="rb30">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>620</y>
+     <width>31</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>30</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnSigPagina">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>610</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(13, 153, 255);
+border-radius: 8px;</string>
+   </property>
+   <property name="text">
+    <string>🠖</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnSigPagina_2">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>610</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(13, 153, 255);
+border-radius: 8px;</string>
+   </property>
+   <property name="text">
+    <string>🠔</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>610</y>
+     <width>71</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>X  de  Y</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
  </widget>
  <tabstops>
@@ -524,9 +597,6 @@ border-radius: 8px;
   <tabstop>cbTipoDocumento</tabstop>
   <tabstop>txtDocumento</tabstop>
   <tabstop>tableDatosClientes</tabstop>
-  <tabstop>checkBox10</tabstop>
-  <tabstop>checkBox20</tabstop>
-  <tabstop>checkBox30</tabstop>
   <tabstop>btnVolver</tabstop>
   <tabstop>btnBuscar</tabstop>
   <tabstop>btnSeleccionar</tabstop>

@@ -12,10 +12,25 @@ class Busqueda_cliente():
         self.interfaz_general_1=interfaz_general_1
         self.btnBuscar()
         self.btnSeleccionar()
+        self.initComboBox_Documentos()
+        self.innit_table()
         self.btnVolver()
         self.interfaz.show()
+        self.interfaz.tableDatosClientes.setRowCount(10)
+        self.interfaz.rb10.clicked.connect(self.innit_table)
+        self.interfaz.rb20.clicked.connect(self.innit_table)
+        self.interfaz.rb30.clicked.connect(self.innit_table)
         
-    
+    def initComboBox_Documentos(self):
+        try:
+            gestor = GestorSis()
+            lista_documentos = gestor.listar_documentos()
+            
+            for documentos in lista_documentos:
+                self.interfaz.cbTipoDocumento.addItem(documentos.tipoDocumento)
+            
+        except Exception as e:
+            print(f"Error listar tipos de documentos: {e}")    
            
     def btnSeleccionar(self):
         self.interfaz.btnSeleccionar.clicked.connect(self.IngDatosPoliza)
@@ -38,16 +53,37 @@ class Busqueda_cliente():
         
     def btnBuscar(self):
         self.interfaz.btnBuscar.clicked.connect(self.listar)
-    
+        
+    def innit_table(self):
+        try:
+            rowCount = self.interfaz.tableDatosClientes.rowCount()
+            for i in range(rowCount - 1, -1, -1):
+                self.interfaz.tableDatosClientes.removeRow(i)
+            
+            if self.interfaz.rb10.isChecked():
+                self.interfaz.tableDatosClientes.setRowCount(10)
+
+            if self.interfaz.rb20.isChecked():
+                self.interfaz.tableDatosClientes.setRowCount(20)
+
+            if self.interfaz.rb30.isChecked():
+                self.interfaz.tableDatosClientes.setRowCount(30)
+        except Exception as e:
+            print(f"Error en innit table: {e}")
+
     def listar(self):
+        
+        self.interfaz.tableDatosClientes.clearContents()
+        
         try:
             gestor = GestorSis()
             
             filtro = ClienteDTO(idCliente=self.interfaz.txtNumero.text(),
                              numeroDocumento=self.interfaz.txtDocumento.text(),
                              nombre=self.interfaz.txtNombre.text(),
-                             apellido=self.interfaz.txtApellido.text())
-
+                             apellido=self.interfaz.txtApellido.text(),
+                             tipoDocumento=self.interfaz.cbTipoDocumento.currentText())    
+                    
             lista_clientes = gestor.listar_clientes(filtro)
             
             rowCount = self.interfaz.tableDatosClientes.rowCount()
@@ -61,8 +97,7 @@ class Busqueda_cliente():
                 rowCount += 1
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
-            
+            print(f"Error en interfaz(): {e}")            
             
     def centrar_elemento(self, row, column, text):
         elemento = QTableWidgetItem(text)

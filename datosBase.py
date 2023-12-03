@@ -84,7 +84,8 @@ try:
         cliente(idCliente=7, nombre="Sofía", apellido="Ramírez", idVivienda=889, idDocumento=1, numeroDocumento=44567812),
         cliente(idCliente=8, nombre="Juan", apellido="Chayanne", idVivienda=874, idDocumento=1, numeroDocumento=45432187),
         cliente(idCliente=9, nombre="Luca", apellido="Polola", idVivienda=324, idDocumento=4, numeroDocumento=45764887),
-        cliente(idCliente=10, nombre="Nicolas", apellido="Edche", idVivienda=453, idDocumento=1, numeroDocumento=45432535)
+        cliente(idCliente=10, nombre="Luismi", apellido="Amor", idVivienda=324, idDocumento=4, numeroDocumento=45778414),
+        cliente(idCliente=12, nombre="Nicolas", apellido="Edche", idVivienda=453, idDocumento=1, numeroDocumento=45432535)
     ]
     for cliente in clientes:
         session.add(cliente)
