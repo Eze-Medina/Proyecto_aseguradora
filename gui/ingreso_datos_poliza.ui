@@ -40,7 +40,6 @@
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -68,7 +67,6 @@ border-radius: 8px;
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -423,7 +421,7 @@ border-radius: 8px;
       </rect>
      </property>
      <property name="text">
-      <string>Suma Asegurada                         :</string>
+      <string>Suma Asegurada                         </string>
      </property>
     </widget>
     <widget class="QLineEdit" name="txtChasis">
@@ -585,7 +583,6 @@ border-radius: 8px;
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>50</weight>
        <bold>false</bold>
       </font>
      </property>
@@ -613,7 +610,6 @@ border-radius: 8px;
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>50</weight>
        <bold>false</bold>
       </font>
      </property>
@@ -1033,7 +1029,6 @@ border-radius: 8px;
      <font>
       <family>Segoe UI Semibold</family>
       <pointsize>14</pointsize>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -1074,7 +1069,6 @@ border-radius: 8px;
     <font>
      <family>Segoe UI Semibold</family>
      <pointsize>14</pointsize>
-     <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>

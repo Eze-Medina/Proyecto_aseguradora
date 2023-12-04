@@ -543,7 +543,7 @@ border-radius: 8px;</string>
     <string>🠖</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnSigPagina_2">
+  <widget class="QPushButton" name="btnAntPagina">
    <property name="geometry">
     <rect>
      <x>370</x>
@@ -568,7 +568,7 @@ border-radius: 8px;</string>
     <string>🠔</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_7">
+  <widget class="QLabel" name="txtNumPag">
    <property name="geometry">
     <rect>
      <x>410</x>
@@ -583,7 +583,7 @@ border-radius: 8px;</string>
     </font>
    </property>
    <property name="text">
-    <string>X  de  Y</string>
+    <string>1  de  1</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

@@ -85,7 +85,14 @@ try:
         cliente(idCliente=8, nombre="Juan", apellido="Chayanne", idVivienda=874, idDocumento=1, numeroDocumento=45432187),
         cliente(idCliente=9, nombre="Luca", apellido="Polola", idVivienda=324, idDocumento=4, numeroDocumento=45764887),
         cliente(idCliente=10, nombre="Luismi", apellido="Amor", idVivienda=324, idDocumento=4, numeroDocumento=45778414),
-        cliente(idCliente=12, nombre="Nicolas", apellido="Edche", idVivienda=453, idDocumento=1, numeroDocumento=45432535)
+        cliente(idCliente=11, nombre="Nicolas", apellido="Edche", idVivienda=165, idDocumento=1, numeroDocumento=45432535),
+        cliente(idCliente=12, nombre="Ana", apellido="Dubois", idVivienda=745, idDocumento=1, numeroDocumento=45947644),
+        cliente(idCliente=13, nombre="Finn", apellido="Kim", idVivienda=324, idDocumento=1, numeroDocumento=31900784),
+        cliente(idCliente=14, nombre="Javier", apellido="López", idVivienda=889, idDocumento=1, numeroDocumento=70944764),
+        cliente(idCliente=15, nombre="Diego", apellido="Alves", idVivienda=123, idDocumento=1, numeroDocumento=32450644),
+        cliente(idCliente=16, nombre="Valentina", apellido="Patel", idVivienda=874, idDocumento=1, numeroDocumento=38940684),
+        cliente(idCliente=17, nombre="Juana", apellido="Alvarez", idVivienda=889, idDocumento=1, numeroDocumento=45715491),
+        cliente(idCliente=18, nombre="Lucia", apellido="Chang", idVivienda=745, idDocumento=1, numeroDocumento=40731845),
     ]
     for cliente in clientes:
         session.add(cliente)

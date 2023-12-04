@@ -66,7 +66,7 @@ class clienteDAO():
             .first()
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
+            print(f"Error en DAO buscar_cliente(): {e}")
 
         session.close()
         return cliente_encontrado
@@ -80,7 +80,7 @@ class clienteDAO():
            documentos = session.query(tipoDocumento).all()
             
         except Exception as e:
-            print(f"Error en listado de documentos en DAO(): {e}")
+            print(f"Error en DAO listar_documentos(): {e}")
 
         session.close()
         return documentos
@@ -112,7 +112,7 @@ class provinciaDAO():
             ).first()
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
+            print(f"Error en DAO buscar_provincia(): {e}")
 
         session.close()
         return provincia_encontrada
@@ -144,7 +144,7 @@ class marcaDAO():
             ).first()
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
+            print(f"Error en DAO buscar_marca(): {e}")
 
         session.close()
         return marca_encontrada
@@ -162,7 +162,7 @@ class localidaDAO():
             ).all()
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
+            print(f"Error en DAO listar_localidades(): {e}")
         
         session.close()       
         return localidades_encontradas
@@ -180,7 +180,7 @@ class modeloDAO():
             ).all()
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
+            print(f"Error en DAO listar_modelos(): {e}")
         
         session.close()       
         return modelos_encontrados
@@ -197,7 +197,7 @@ class modeloDAO():
             ).first()
             
         except Exception as e:
-            print(f"Error en modeloDAO buscar_modelo(): {e}")
+            print(f"Error en DAO buscar_modelo(): {e}")
         
         session.close()       
         return modelo_encontrado
@@ -212,7 +212,7 @@ class estadoCivilDAO():
             estados_encontrados = session.query(estadoCivil).all()
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
+            print(f"Error en DAO listar_estados(): {e}")
         
         session.close()       
         return estados_encontrados
@@ -226,7 +226,7 @@ class estadoCivilDAO():
             estado = session.query(estadoCivil).filter_by(estado=filtro).first()
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
+            print(f"Error en DAO buscar_id() de estadoCivilDAO: {e}")
         
         session.close()       
         return estado.idEstadoCivil
@@ -241,7 +241,7 @@ class cantSiniestrosDAO():
             siniestros_encontrados = session.query(cantSiniestros).all()
             
         except Exception as e:
-            print(f"Error en prueba(): {e}")
+            print(f"Error en DAO listar_siniestros(): {e}")
         
         session.close()       
         return siniestros_encontrados
@@ -258,7 +258,7 @@ class cantSiniestrosDAO():
             ).first()
             
         except Exception as e:
-            print(f"Error en cantSiniestrosDAO buscar_id(): {e}")
+            print(f"Error en DAO buscar_id() en cantSiniestrosDAO: {e}")
         
         session.close()       
         return siniestro_encontrado.idSiniestros
@@ -273,7 +273,7 @@ class hijoDAO():
             id = session.query(func.max(hijo.idHijo)).scalar()
             
         except Exception as e:
-            print(f"Error en hijoDAO ulimo_id(): {e}")
+            print(f"Error en ulimo_id() en hijoDAO: {e}")
 
         session.close()
         return id
@@ -292,7 +292,7 @@ class hijoDAO():
             session.add(nuevo_hijo)
             session.commit()
         except Exception as e:
-            print(f"Error en hijoDAO guardar(): {e}")
+            print(f"Error en DAO guardar() en hijoDAO: {e}")
         session.close()
 
 class polizaDAO():
@@ -453,7 +453,7 @@ class vehiculoDAO():
         except Exception as e:
             print(f"Error en vehiculoDAO guardar(): {e}")
         session.close()  
-         
+        
 class factorKmDAO():
     def buscar_id(self,kilometros):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)

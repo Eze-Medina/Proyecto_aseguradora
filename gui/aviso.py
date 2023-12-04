@@ -1,13 +1,19 @@
-from PyQt6 import uic
+from PyQt6 import uic, QtWidgets
 
 
 class Aviso():
-    def __init__(self,interfaz,problema):
+    def __init__(self, interfaz, problema):
         self.aviso = uic.loadUi("gui/aviso.ui")
-        self.problema=problema
+        self.problema = problema
         self.aviso.txtAviso.setText(problema)
-        self.interfaz=interfaz
+        self.interfaz = interfaz
         self.btnAceptar()
+        self.mostrar_aviso()
+
+    def mostrar_aviso(self):
+        # Hacer la ventana modal
+        self.aviso.setModal(True)
+        # Mostrar la ventana
         self.aviso.show()
         
     def btnAceptar(self):
