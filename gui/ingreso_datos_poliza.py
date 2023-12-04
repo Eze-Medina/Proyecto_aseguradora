@@ -245,6 +245,7 @@ class Ingreso_datos_poliza():
         except Exception as e:
             print(f"Error en recuperacion2: {e}")    
         
+
     def vaciarLista(self):
         self.datosPoliza.hijos.clear()
         self.interfaz.txtCantidadHijos.setText("0") 

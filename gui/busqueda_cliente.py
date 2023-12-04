@@ -2,7 +2,6 @@ from PyQt6 import uic, QtWidgets
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMessageBox, QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QDialog
 from gui.ingreso_datos_poliza import Ingreso_datos_poliza
-from gui.aviso import Aviso
 from logica.gestor import GestorSis
 from model.modelDTO import ClienteDTO
 
@@ -11,12 +10,11 @@ class Busqueda_cliente():
     def __init__(self,interfaz_general_1):
         self.interfaz = uic.loadUi("gui/busqueda_cliente.ui")
         self.interfaz_general_1=interfaz_general_1
-        self.interfaz.btnBuscar.clicked.connect(self.btnBuscar)
+        self.btnBuscar()
         self.btnSeleccionar()
         self.initComboBox_Documentos()
         self.innit_table()
         self.btnVolver()
-        self.verificar()
         self.interfaz.show()
         self.interfaz.tableDatosClientes.setRowCount(10)
         self.interfaz.rb10.clicked.connect(self.innit_table)
@@ -37,53 +35,24 @@ class Busqueda_cliente():
     def btnSeleccionar(self):
         self.interfaz.btnSeleccionar.clicked.connect(self.IngDatosPoliza)
 
-    def verificar(self):
-            try:
-                if (self.interfaz.txtNumero.text()== "" and 
-                    self.interfaz.txtNombre.text()== "" and 
-                    self.interfaz.txtApellido.text()== "" and 
-                    self.interfaz.cbTipoDocumento.currentIndex()== 0 and
-                    self.interfaz.txtDocumento.text()== ""
-                    ):
-                        print("FUNCO LA VERIFICACION")
-                        return True
-            except Exception as e:
-                print(f"Error en verificacion: {e}")
-                
     def IngDatosPoliza(self):
         
         fila_seleccionada = self.interfaz.tableDatosClientes.currentRow()
         item = self.interfaz.tableDatosClientes.item(fila_seleccionada, 0)
+        dato = int(item.text())
         
-        try:
-            if item == None:
-                self.aviso=Aviso(self,'Seleccione un cliente')
-          
-            else:
-                dato = int(item.text())
-                
-                gestor=GestorSis()
-                direc=ClienteDTO(idCliente=dato)
-                clienteDTO=gestor.buscar_cliente(direc)
+        gestor=GestorSis()
+        direc=ClienteDTO(idCliente=dato)
+        clienteDTO=gestor.buscar_cliente(direc)
 
-                self.ingreso_datos_poliza = Ingreso_datos_poliza(self,clienteDTO)
-                self.interfaz.hide()
-                
+        try:
+            self.ingreso_datos_poliza = Ingreso_datos_poliza(self,clienteDTO)
+            self.interfaz.hide()
         except Exception as e:
             print(f"Error: {e}")
         
     def btnBuscar(self):
-        try:
-            if not self.verificar():
-                self.interfaz.btnBuscar.clicked.connect(self.listar)
-            else:
-                try:
-                    self.aviso=Aviso(self,'Completar los datos por favor')
-                except Exception as e:
-                    print(f"Error: {e}")   
-                    self.aviso=Aviso(self,f'Error: {e}')
-        except Exception as e:
-            print(f"Error en buscar: {e}")
+        self.interfaz.btnBuscar.clicked.connect(self.listar)
         
     def innit_table(self):
         try:
