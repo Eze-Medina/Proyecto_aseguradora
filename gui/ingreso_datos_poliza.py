@@ -2,7 +2,7 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import QMessageBox, QComboBox, QCheckBox, QVBoxLayout
 from gui.seleccion_tipo_poliza import Seleccion_tipo_poliza
 from gui.aviso import Aviso
-from logica.gestor import GestorSis
+from logica.gestor import GestorDatos,GestorVehiculo,GestorUbicacion,GestorAseguradora
 from model.modelDTO import ClienteDTO, ProvinciaDTO, MarcaDTO, LocalidadDTO, hijoDTO, polizaDTO
 from datetime import datetime
 
@@ -37,7 +37,7 @@ class Ingreso_datos_poliza():
         self.interfaz.show()
     
     def initcomboBox_Hijos(self):
-        gestor = GestorSis()
+        gestor = GestorDatos()
         
         sexo=["Femenino","Masculino"] #esta de mas esto?
         for i in sexo:
@@ -49,7 +49,7 @@ class Ingreso_datos_poliza():
             self.interfaz.cbEstadoCivil.addItem(estado.estado)
             
     def initcomboBox_NroSiniestro(self):
-        gestor = GestorSis()
+        gestor = GestorVehiculo()
         lista_siniestros = gestor.listar_siniestros()  
           
         for siniestros in lista_siniestros:
@@ -57,7 +57,7 @@ class Ingreso_datos_poliza():
             
     def initComboBox_Provicias(self):
         try:
-            gestor = GestorSis()
+            gestor = GestorUbicacion()
             filtro = ProvinciaDTO()
             lista_provincias = gestor.listar_provincias(filtro)
 
@@ -81,7 +81,7 @@ class Ingreso_datos_poliza():
         self.interfaz.cbLocalidad.clear()
         self.interfaz.cbLocalidad.addItem("--- Seleccione una opción")
         try:
-            gestor = GestorSis()
+            gestor = GestorUbicacion()
             lista_localidades = gestor.listar_localidades(provinciaSeleccionada)
 
             lista_localidades_ordenada = sorted(lista_localidades, key=lambda x: x.nombre)
@@ -94,7 +94,7 @@ class Ingreso_datos_poliza():
   
     def initComboBox_Marcas(self):
         try:
-            gestor = GestorSis()
+            gestor = GestorVehiculo()
             filtro = MarcaDTO()
             lista_marcas = gestor.listar_marcas(filtro)
             
@@ -119,7 +119,7 @@ class Ingreso_datos_poliza():
         self.interfaz.cbModeloVehiculo.addItem("--- Seleccione una opción")
         
         try:
-            gestor = GestorSis()
+            gestor = GestorVehiculo()
             lista_modelos = gestor.listar_modelos(marcaSeleccionada)
             
             lista_modelo_ordenada = sorted(lista_modelos, key=lambda x: x.nombre)
@@ -137,7 +137,7 @@ class Ingreso_datos_poliza():
             print(f"Error en comboBoxModelo_changed(): {e}") 
             
     def initcomboBox_Anio(self,index):
-        gestor=GestorSis()
+        gestor=GestorVehiculo()
         modeloSeleccionado = self.interfaz.cbModeloVehiculo.itemText(index)
         
         self.interfaz.cbAnioVehiculo.clear()
@@ -161,7 +161,7 @@ class Ingreso_datos_poliza():
         anioSeleccionado = self.interfaz.cbModeloVehiculo.currentText()
         if (anioSeleccionado != "--- Seleccione una opción"):
             try:
-                gestor = GestorSis()
+                gestor = GestorAseguradora()
                 suma = gestor.recuperar_SumaAsegurada()
                 self.interfaz.txtSumaAsegurada.setText(f"{suma}")
                 

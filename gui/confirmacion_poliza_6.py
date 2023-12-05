@@ -1,7 +1,7 @@
 from PyQt6 import uic
 from PyQt6.QtWidgets import QMessageBox
 from model.modelDTO import ClienteDTO, polizaDTO
-from logica.gestor import GestorSis
+from logica.gestor import GestorPoliza
 from datetime import datetime, timedelta
 from gui.aviso import Aviso
 from dateutil.relativedelta import *
@@ -47,7 +47,7 @@ class Confirmacion_poliza_6():
         self.interfaz.btnImprimir.clicked.connect(self.guardar)
     
     def guardar(self):
-        gestor = GestorSis()
+        gestor = GestorPoliza()
         gestor.guardar_Poliza(self.datosPoliza,self.datosCliente)
         self.finalizar()
             

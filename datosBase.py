@@ -116,8 +116,8 @@ try:
         modelo(idModelo=1,idMarca=3, nombre="Bronco Sport",factorRobo=1.1,inicioProduccion=datetime(2014, 1, 1),finProduccion=datetime(2023, 1, 1)),
         modelo(idModelo=2,idMarca=3, nombre="F-150 Raptor",factorRobo=1.1,inicioProduccion=datetime(2018, 1, 1),finProduccion=datetime(2023, 1, 1)),
         modelo(idModelo=3,idMarca=3, nombre="Mustang",factorRobo=1.1,inicioProduccion=datetime(2009, 1, 1),finProduccion=datetime(2023, 1, 1)),
-        modelo(idModelo=4,idMarca=1, nombre="BMW M5 Sedán",factorRobo=1.1,inicioProduccion=datetime(2019, 1, 1),finProduccion=datetime(2023, 1, 1)),
-        modelo(idModelo=5,idMarca=1, nombre="BMW X3 M",factorRobo=1.1,inicioProduccion=datetime(2021, 1, 1),finProduccion=datetime(2023, 1, 1)),
+        modelo(idModelo=4,idMarca=1, nombre="M5 Sedán",factorRobo=1.1,inicioProduccion=datetime(2019, 1, 1),finProduccion=datetime(2023, 1, 1)),
+        modelo(idModelo=5,idMarca=1, nombre="X3 M",factorRobo=1.1,inicioProduccion=datetime(2021, 1, 1),finProduccion=datetime(2023, 1, 1)),
     ]
     for mod in modelos:
         session.add(mod)

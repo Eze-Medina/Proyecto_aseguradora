@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMessageBox, QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QDialog
 from gui.ingreso_datos_poliza import Ingreso_datos_poliza
 from gui.aviso import Aviso
-from logica.gestor import GestorSis
+from logica.gestor import GestorCliente
 from model.modelDTO import ClienteDTO
 
 
@@ -29,7 +29,7 @@ class Busqueda_cliente():
         
     def initComboBox_Documentos(self):
         try:
-            gestor = GestorSis()
+            gestor = GestorCliente()
             lista_documentos = gestor.listar_documentos()
             
             for documentos in lista_documentos:
@@ -77,7 +77,7 @@ class Busqueda_cliente():
             else:
                 dato = int(item.text())
                 
-                gestor=GestorSis()
+                gestor=GestorCliente()
                 direc=ClienteDTO(idCliente=dato)
                 clienteDTO=gestor.buscar_cliente(direc)
 
@@ -175,14 +175,14 @@ class Busqueda_cliente():
 
     def obtener_clientes(self):
         try:
-            gestor = GestorSis()
+            gestor = GestorCliente()
             
             filtro = ClienteDTO(idCliente=self.interfaz.txtNumero.text(),
                              numeroDocumento=self.interfaz.txtDocumento.text(),
                              nombre=self.interfaz.txtNombre.text(),
                              apellido=self.interfaz.txtApellido.text(),
                              tipoDocumento=self.interfaz.cbTipoDocumento.currentText())    
-                    
+            print(filtro)        
             lista_clientes = gestor.listar_clientes(filtro)
             self.lista_clientes = lista_clientes
             self.mostrar_pag(lista_clientes)
