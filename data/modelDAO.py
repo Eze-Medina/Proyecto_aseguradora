@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker, joinedload
-from sqlalchemy import create_engine, select, func, insert, desc
+from sqlalchemy import create_engine, select, func, insert, desc, and_
 from sqlalchemy.sql.functions import coalesce
 from model.models import cuotas,cliente, provincia, marca, localidad, modelo, estadoCivil, cantSiniestros, poliza, vehiculo, medidaDeSeguridad, tipoCobertura, hijo, poliza_Seguridad, factorKm, tipoDocumento
 from model.modelDTO import ClienteDTO, ProvinciaDTO, MarcaDTO, polizaDTO, hijoDTO
@@ -26,22 +26,22 @@ class clienteDAO():
         
         try:
             query = session.query(cliente).options(joinedload(cliente.tipo_documento), joinedload(cliente.vivienda))
+            filtros = []
 
-            filtros = {}
             if clienteDTO.idCliente:
-                filtros['idCliente'] = clienteDTO.idCliente
+                filtros.append(cliente.idCliente.like(f"{clienteDTO.idCliente}%"))
             if clienteDTO.numeroDocumento:
-                filtros['numeroDocumento'] = clienteDTO.numeroDocumento
+                filtros.append(cliente.numeroDocumento.like(f"{clienteDTO.numeroDocumento}%"))
             if clienteDTO.nombre:
-                filtros['nombre'] = clienteDTO.nombre
+                filtros.append(cliente.nombre.like(f"{clienteDTO.nombre}%"))
             if clienteDTO.apellido:
-                filtros['apellido'] = clienteDTO.apellido
+                filtros.append(cliente.apellido.like(f"{clienteDTO.apellido}%"))
             if clienteDTO.tipoDocumento:
                 documento = session.query(tipoDocumento).filter_by(tipoDocumento=clienteDTO.tipoDocumento).first()
                 if documento:
-                    filtros['idDocumento'] = documento.idDocumento
+                    filtros.append(cliente.idDocumento == documento.idDocumento)
 
-            cliente_encontrado = query.filter_by(**filtros).all()
+            cliente_encontrado = query.filter(and_(*filtros)).all()
             
         except Exception as e:
             print(f"Error en DAO listar_cliente(): {e}")
