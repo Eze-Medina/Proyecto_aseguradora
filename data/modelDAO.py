@@ -271,7 +271,8 @@ class hijoDAO():
 
         try:
             id = session.query(func.max(hijo.idHijo)).scalar()
-            
+            if id == None:
+                id = 0
         except Exception as e:
             print(f"Error en ulimo_id() en hijoDAO: {e}")
 
@@ -341,7 +342,8 @@ class polizaDAO():
 
         try:
             id = session.query(func.max(poliza.idPoliza)).scalar()
-            
+            if id == None:
+                id = 0
         except Exception as e:
             print(f"Error en polizaDAO ulimo_id(): {e}")
 
@@ -375,7 +377,8 @@ class polizaSegDAO():
 
         try:
             id = session.query(func.max(poliza_Seguridad.idPolizaSeguridad)).scalar()
-            
+            if  id == None:
+                id = 0
         except Exception as e:
             print(f"Error en polizaSegDAO ulimo_id(): {e}")
 
@@ -390,7 +393,8 @@ class cuotaDAO():
 
         try:
             id = session.query(func.max(cuotas.idCuota)).scalar()
-            
+            if id == None:
+                id = 0
         except Exception as e:
             print(f"Error en cuotaDAO ulimo_id(): {e}")
 
@@ -425,7 +429,8 @@ class vehiculoDAO():
 
         try:
             id = session.query(func.max(vehiculo.idVehiculo)).scalar()
-            
+            if id == None:
+                id = 0
         except Exception as e:
             print(f"Error en vehiculoDAO ulimo_id(): {e}")
 

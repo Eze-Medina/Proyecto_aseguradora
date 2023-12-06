@@ -13,7 +13,7 @@ class Base(DeclarativeBase):
 class poliza(Base):
     __tablename__ = 'poliza'
     
-    idPoliza = Column(Integer(),primary_key=True)
+    idPoliza = Column(Integer(),primary_key=True, autoincrement=True)
     idCliente = Column(Integer, ForeignKey('cliente.idCliente'))
     idTipoCobertura = Column(Integer, ForeignKey('tipoCobertura.idTipoCobertura'))
     idVehiculo = Column(Integer, ForeignKey('vehiculo.idVehiculo'))
@@ -38,7 +38,7 @@ class poliza(Base):
 class cuotas(Base):
     __tablename__ = 'cuotas'
     
-    idCuota = Column(Integer(),primary_key=True)
+    idCuota = Column(Integer(),primary_key=True, autoincrement=True)
     idPoliza = Column(Integer, ForeignKey('poliza.idPoliza'))
     idRecibo = Column(Integer, ForeignKey('recibo.idRecibo'))
     cuotaNro = Column(Integer)
@@ -55,7 +55,7 @@ class cuotas(Base):
 class recibo(Base):
     __tablename__ = 'recibo'
     
-    idRecibo = Column(Integer(),primary_key=True)
+    idRecibo = Column(Integer(),primary_key=True, autoincrement=True)
     fechaPago = Column(DateTime())
     horaPago = Column(Time())
     premio = Column(Float())
@@ -73,7 +73,7 @@ class recibo(Base):
 class mesAbonado(Base):
     __tablename__ = 'mesAbonado'
     
-    idMesAbonado = Column(Integer(),primary_key=True)
+    idMesAbonado = Column(Integer(),primary_key=True, autoincrement=True)
     mesAbonado = Column(DateTime())
     idRecibo = Column(Integer)
     
@@ -84,7 +84,7 @@ class mesAbonado(Base):
 class registroFactores(Base):
     __tablename__ = 'registroFactores'
     
-    idRegistro = Column(Integer(),primary_key=True)
+    idRegistro = Column(Integer(),primary_key=True, autoincrement=True)
     idPoliza = Column(Integer, ForeignKey('poliza.idPoliza'))
     factorCobertura = Column(Integer)
     siniestro = Column(Integer)
@@ -107,7 +107,7 @@ class registroFactores(Base):
 class cliente(Base):
     __tablename__ = 'cliente'
 
-    idCliente = Column(Integer, primary_key=True)
+    idCliente = Column(Integer, primary_key=True, autoincrement=True)
     idDocumento = Column(Integer, ForeignKey('tipoDocumento.idDocumento'))
     idVivienda = Column(Integer, ForeignKey('vivienda.idVivienda'))
     numeroDocumento = Column(Integer)
@@ -126,7 +126,7 @@ class cliente(Base):
 class tipoDocumento(Base):
     __tablename__ = 'tipoDocumento'
     
-    idDocumento = Column(Integer(),primary_key=True)
+    idDocumento = Column(Integer(),primary_key=True, autoincrement=True)
     tipoDocumento = Column(String(50))
     descripcion = Column(String(50))
     
@@ -136,7 +136,7 @@ class tipoDocumento(Base):
 class pais(Base):
     __tablename__ = 'pais'
     
-    codigoPais = Column(Integer(),primary_key=True)
+    codigoPais = Column(Integer(),primary_key=True, autoincrement=True)
     nombre = Column(String(50))
 
     def __str__(self):
@@ -146,7 +146,7 @@ class pais(Base):
 class provincia(Base):
     __tablename__ = 'provincia'
     
-    codigoProvincia = Column(Integer(),primary_key=True)
+    codigoProvincia = Column(Integer(),primary_key=True, autoincrement=True)
     codigoPais = Column(Integer, ForeignKey('pais.codigoPais'))
     nombre = Column(String(50))
     riesgoProvincia = Column(Float())
@@ -160,7 +160,7 @@ class provincia(Base):
 class localidad(Base):
     __tablename__ = 'localidad'
     
-    codigoLocalidad = Column(Integer(),primary_key=True)
+    codigoLocalidad = Column(Integer(),primary_key=True, autoincrement=True)
     codigoProvincia = Column(Integer, ForeignKey('provincia.codigoProvincia'))
     codigoPostal = Column(Integer)
     nombre = Column(String(50))
@@ -175,8 +175,7 @@ class localidad(Base):
 class vivienda(Base):
     __tablename__ = 'vivienda'
     
-    idVivienda = Column(Integer(),primary_key=True)
-    
+    idVivienda = Column(Integer(),primary_key=True, autoincrement=True)
     codigoLocalidad = Column(Integer, ForeignKey('localidad.codigoLocalidad'))
     calle = Column(String(50))
     numero = Column(Integer)
@@ -193,7 +192,7 @@ class poliza_Seguridad(Base):
     __tablename__ = 'poliza_Seguridad'
     
     
-    idPolizaSeguridad = Column(Integer(), primary_key=True)
+    idPolizaSeguridad = Column(Integer(), primary_key=True, autoincrement=True)
     idPoliza = Column(Integer(), ForeignKey('poliza.idPoliza'))
     idMedidaSeguridad = Column(Integer(), ForeignKey('medidaDeSeguridad.idMedidaSeguridad'))
     
@@ -207,7 +206,7 @@ class poliza_Seguridad(Base):
 class medidaDeSeguridad(Base):
     __tablename__ = 'medidaDeSeguridad'
     
-    idMedidaSeguridad = Column(Integer(),primary_key=True)
+    idMedidaSeguridad = Column(Integer(),primary_key=True, autoincrement=True)
     descripcion = Column(String(50))
     medida = Column(String(50))
     factorMedida = Column(Integer)
@@ -221,7 +220,7 @@ class medidaDeSeguridad(Base):
 class registro_Seguridad(Base):
     __tablename__ = 'registro_Seguridad'
     
-    idRegistroSeguridad = Column(Integer(), primary_key=True)
+    idRegistroSeguridad = Column(Integer(), primary_key=True, autoincrement=True)
     idRegistroCambios = Column(Integer(), ForeignKey('registroCambiosPoliza.idRegistroCambios'))
     idMedidaSeguridad = Column(Integer(), ForeignKey('medidaDeSeguridad.idMedidaSeguridad'))
     
@@ -234,7 +233,7 @@ class registro_Seguridad(Base):
 class registroCambiosPoliza(Base):
     __tablename__ = 'registroCambiosPoliza'
     
-    idRegistroCambios = Column(Integer(),primary_key=True)
+    idRegistroCambios = Column(Integer(),primary_key=True, autoincrement=True)
     patente = Column(Integer, ForeignKey('vehiculo.patente'))
     idTipoCobertura = Column(Integer, ForeignKey('tipoCobertura.idTipoCobertura'))
     anioVehiculo = Column(Integer)
@@ -253,7 +252,7 @@ class registroCambiosPoliza(Base):
 class hijo(Base):
     __tablename__ = 'hijo'
     
-    idHijo = Column(Integer(),primary_key=True)
+    idHijo = Column(Integer(),primary_key=True, autoincrement=True)
     idEstadoCivil = Column(Integer, ForeignKey('estadoCivil.idEstadoCivil'))
     idRegistroCambios = Column(Integer, ForeignKey('registroCambiosPoliza.idRegistroCambios'))
     idPoliza = Column(Integer, ForeignKey('poliza.idPoliza'))
@@ -270,7 +269,7 @@ class hijo(Base):
 class estadoCivil(Base):
     __tablename__ = 'estadoCivil'
     
-    idEstadoCivil = Column(Integer(),primary_key=True)
+    idEstadoCivil = Column(Integer(),primary_key=True, autoincrement=True)
     estado = Column(String(50))
 
     def __str__(self):
@@ -280,7 +279,7 @@ class estadoCivil(Base):
 class tipoCobertura(Base):
     __tablename__ = 'tipoCobertura'
     
-    idTipoCobertura = Column(Integer(),primary_key=True)
+    idTipoCobertura = Column(Integer(),primary_key=True, autoincrement=True)
     tipoCobertura = Column(String(50))
     descripcion = Column(String(50))
     factorTipo = Column(Integer)
@@ -294,7 +293,7 @@ class tipoCobertura(Base):
 class vehiculo(Base):
     __tablename__ = 'vehiculo'
     
-    idVehiculo = Column(Integer(),primary_key=True)
+    idVehiculo = Column(Integer(),primary_key=True, autoincrement=True)
     patente = Column(String(50))
     idModelo = Column(Integer, ForeignKey('modelo.idModelo'))
     idFactorKm = Column(Integer, ForeignKey('factorKm.idFactorKm'))
@@ -316,7 +315,7 @@ class vehiculo(Base):
 class marca(Base):
     __tablename__ = 'marca'
     
-    idMarca = Column(Integer(),primary_key=True)
+    idMarca = Column(Integer(),primary_key=True, autoincrement=True)
     nombre = Column(String(50))
 
     def __str__(self):
@@ -326,7 +325,7 @@ class marca(Base):
 class modelo(Base):
     __tablename__ = 'modelo'
     
-    idModelo = Column(Integer(),primary_key=True)
+    idModelo = Column(Integer(),primary_key=True, autoincrement=True)
     idMarca = Column(Integer, ForeignKey('marca.idMarca'))
     nombre = Column(String(50))
     inicioProduccion = Column(DateTime())
@@ -342,7 +341,7 @@ class modelo(Base):
 class cantSiniestros(Base):
     __tablename__ = 'cantSiniestros'
     
-    idSiniestros = Column(Integer(),primary_key=True)
+    idSiniestros = Column(Integer(),primary_key=True, autoincrement=True)
     cantidad = Column(String(50))
     factorSiniestros = Column(Integer)
 
@@ -353,7 +352,7 @@ class cantSiniestros(Base):
 class factorKm(Base):
     __tablename__ = 'factorKm'
     
-    idFactorKm = Column(Integer(),primary_key=True)
+    idFactorKm = Column(Integer(),primary_key=True, autoincrement=True)
     rango = Column(Integer)
     factorKm = Column(Integer)
 
@@ -364,7 +363,7 @@ class factorKm(Base):
 class registroCambio(Base):
     __tablename__ = 'registroCambio'
     
-    idCambios = Column(Integer(),primary_key=True)
+    idCambios = Column(Integer(),primary_key=True, autoincrement=True)
     fechaDeCambio = Column(DateTime())
     claseCambio = Column(String(50))
     idObjeto = Column(Integer)
@@ -376,7 +375,7 @@ class registroCambio(Base):
 class factoresUniversales(Base):
     __tablename__ = 'factoresUniversales'
     
-    idFactoresUniversales = Column(Integer(),primary_key=True)
+    idFactoresUniversales = Column(Integer(),primary_key=True, autoincrement=True)
     factorDerechoEmision = Column(Integer)
     factorDescuentoUnidadAd = Column(Integer)
     factorHijo = Column(Integer)
@@ -385,7 +384,7 @@ class factoresUniversales(Base):
 class usuario(Base):
     __tablename__ = 'usuario'
     
-    idUsuario = Column(Integer(),primary_key=True)
+    idUsuario = Column(Integer(),primary_key=True, autoincrement=True)
     nombre = Column(String(50))
     contrasenia = Column(String(50))
     idRol = Column(Integer, ForeignKey('rol.idRol'))
@@ -399,7 +398,7 @@ class usuario(Base):
 class rol(Base):
     __tablename__ = 'rol'
     
-    idRol = Column(Integer(),primary_key=True)
+    idRol = Column(Integer(),primary_key=True, autoincrement=True)
     nombre = Column(String(50))
 
     def __str__(self):

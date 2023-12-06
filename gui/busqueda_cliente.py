@@ -88,17 +88,7 @@ class Busqueda_cliente():
             print(f"Error: {e}")
         
     def btnBuscar(self):
-        try:
-            if not self.verificar():
-                self.interfaz.btnBuscar.clicked.connect(self.obtener_clientes)
-            else:
-                try:
-                    self.aviso=Aviso(self,'Completar los datos por favor')
-                except Exception as e:
-                    print(f"Error: {e}")   
-                    self.aviso=Aviso(self,f'Error: {e}')
-        except Exception as e:
-            print(f"Error en buscar: {e}")
+        self.interfaz.btnBuscar.clicked.connect(self.obtener_clientes)
     
     def btnSigPagina(self):
         self.interfaz.btnSigPagina.clicked.connect(self.pasarPagina)
@@ -152,13 +142,8 @@ class Busqueda_cliente():
             print(f"Error en pasar pagina: {e}")
             
              
-    def innit_table(self):
-        
+    def innit_table(self):      
         try:
-            # rowCount = self.interfaz.tableDatosClientes.rowCount()
-            # for i in range(rowCount - 1, -1, -1):
-            #     self.interfaz.tableDatosClientes.removeRow(i)
-            
             if self.interfaz.rb10.isChecked():
                 self.interfaz.tableDatosClientes.setRowCount(10)
                 self.mostrar_pag(self.lista_clientes)
@@ -170,6 +155,7 @@ class Busqueda_cliente():
             if self.interfaz.rb30.isChecked():
                 self.interfaz.tableDatosClientes.setRowCount(30)
                 self.mostrar_pag(self.lista_clientes)
+                
         except Exception as e:
             print(f"Error en innit table: {e}")
 
