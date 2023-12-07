@@ -81,21 +81,20 @@ class GestorVehiculo:
     def vehiculo_id(self):
         vehiculoDao=vehiculoDAO()
         newIdVehiculo = vehiculoDao.ulimo_id()
-        newIdVehiculo += 1
         return newIdVehiculo
 
-    def guardar(self,polizaDTO: polizaDTO,newIdVehiculo):
+    def guardar(self,polizaDTO: polizaDTO):
         vehiculoDao = vehiculoDAO()
         modeloDao = modeloDAO()
         factorKmDao = factorKmDAO()
         siniDao=cantSiniestrosDAO()
         try:
-                modelo = modeloDao.buscar_modelo(polizaDTO.modeloVehiculo)
-                idModelo = modelo.idModelo
-                idFactorKm = factorKmDao.buscar_id(polizaDTO.kilometrosAnio)
-                idSini= siniDao.buscar_id(polizaDTO.cantSiniestros)
-                vehiculoDao.guardar(newIdVehiculo,polizaDTO.patente,idModelo,idSini,idFactorKm,polizaDTO.anioVehiculo,polizaDTO.kilometrosAnio,
-                                    polizaDTO.chasis,polizaDTO.motor)
+            modelo = modeloDao.buscar_modelo(polizaDTO.modeloVehiculo)
+            idModelo = modelo.idModelo
+            idFactorKm = factorKmDao.buscar_id(polizaDTO.kilometrosAnio)
+            idSini= siniDao.buscar_id(polizaDTO.cantSiniestros)
+            vehiculoDao.guardar(polizaDTO.patente,idModelo,idSini,idFactorKm,polizaDTO.anioVehiculo,polizaDTO.kilometrosAnio,
+                                polizaDTO.chasis,polizaDTO.motor)
         except Exception as e:
             print(f"Error en VEHICULO(): {e}") 
                 
@@ -162,9 +161,7 @@ class GestorDatos:
         try:
             for hijo in polizaDTO.hijos:
                 idEstado=estCivilDao.buscar_id(hijo.estadoCivil)
-                hijoDao.guardar(newIdHijo,idEstado,newIdPoliza,hijo.edad,hijo.sexo)
-                newIdHijo += 1       
-            
+                hijoDao.guardar(idEstado,newIdPoliza,hijo.edad,hijo.sexo)       
         except Exception as e:
             print(f"Error en HIJO(): {e}")
 
@@ -184,39 +181,36 @@ class GestorPoliza:
         fechaInicio = datetime.strptime(polizaDTO.fechaInicioVigencia, '%d/%m/%Y').date()
         
         # CREACION DE OBJETO: VEHICULO
-        try:
-            newIdVehiculo = gesVehiculo.vehiculo_id()
         
-            gesVehiculo.guardar(polizaDTO,newIdVehiculo)
+        try:
+            gesVehiculo.guardar(polizaDTO)
+            newIdVehiculo = gesVehiculo.vehiculo_id()
         except Exception as e:
             print(f"Error en VEHICULO(): {e}")
+            
         # CREACION DE OBJETO: POLIZA
+        
         try:
+            polizaDao.guardar(clienteDTO.idCliente,newIdVehiculo,polizaDTO.tipoCobertura,
+                              polizaDTO.fechaFinVigencia,fechaInicio,polizaDTO.sumaAsegurada)
             newIdPoliza = polizaDao.ulimo_id()
-            newIdPoliza += 1
-            polizaDao.guardar(newIdPoliza,clienteDTO.idCliente,newIdVehiculo,polizaDTO.tipoCobertura,
-                            polizaDTO.fechaFinVigencia,fechaInicio,polizaDTO.sumaAsegurada)
         except Exception as e:
             print(f"Error en POLIZA(): {e}")
             
         # CREACION DE OBJETOS: POLIZA SEGURIDAD
-        try:
-            newIdPolizaSeg = poliSegDao.ulimo_id()
-            newIdPolizaSeg += 1
-        
+        try:       
             for medida in polizaDTO.medidas:
-                poliSegDao.guardar(medida,newIdPolizaSeg,newIdPoliza)
-                newIdPolizaSeg += 1 
+                poliSegDao.guardar(medida,newIdPoliza)
         except Exception as e:
             print(f"Error en SEGURIDAD(): {e}") 
               
         # CREACION DE OBJETOS: HIJO
-        try:
-            newIdHijo = gesDatos.hijo_id()
-            
-            gesDatos.guardarHijos(polizaDTO,newIdPoliza,newIdHijo)
+        
+        try: 
+            gesDatos.guardarHijos(polizaDTO,newIdPoliza)
         except Exception as e:
-            print(f"Error en HIJO(): {e}")                
+            print(f"Error en HIJO(): {e}") 
+                           
         # CREACION DE OBJETO: CUOTAS
         
         newIdCuota = cuotaDao.ulimo_id()
@@ -226,15 +220,13 @@ class GestorPoliza:
             cuota_time = fechaInicio - timedelta(days=1)
         
             if polizaDTO.formaPago=="Semestral":
-                cuotaDao.guardar(newIdCuota,newIdPoliza,1,cuota_time,100,1000,900)
+                cuotaDao.guardar(newIdPoliza,1,cuota_time,100,1000,900)
                 
             elif polizaDTO.formaPago=="Mensual":
             
                 for i in range(1, 7):
-                    cuotaDao.guardar(newIdCuota,newIdPoliza,i,cuota_time,100,1000,900/6)
-                    newIdCuota += 1
-                    cuota_time = cuota_time + relativedelta(months=1)
-                         
+                    cuotaDao.guardar(newIdPoliza,i,cuota_time,100,1000,900/6)
+                    cuota_time = cuota_time + relativedelta(months=1)           
         except Exception as e:
             print(f"Error en CUOTAS(): {e}")
 

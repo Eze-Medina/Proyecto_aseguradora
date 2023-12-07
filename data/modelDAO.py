@@ -279,13 +279,12 @@ class hijoDAO():
         session.close()
         return id
     
-    def guardar(self,newIdHijo,newIdEstado,newIdPoliza,newEdad,newSexo):
+    def guardar(self,newIdEstado,newIdPoliza,newEdad,newSexo):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
         try:
-            nuevo_hijo = hijo(idHijo=newIdHijo,
-                                idEstadoCivil=newIdEstado,
+            nuevo_hijo = hijo(idEstadoCivil=newIdEstado,
                                 idPoliza=newIdPoliza,
                                 edad=newEdad,
                                 sexo=newSexo
@@ -298,13 +297,12 @@ class hijoDAO():
 
 class polizaDAO():
     
-    def guardar(self,newIdPoliza,newidCliente,newIdVehiculo,newtipoCobertura,newfechaFinVigencia,newfechaInicio,newsumaAsegurada):
+    def guardar(self,newidCliente,newIdVehiculo,newtipoCobertura,newfechaFinVigencia,newfechaInicio,newsumaAsegurada):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
         try:
-            nueva_poliza = poliza(idPoliza=newIdPoliza,
-                                    idCliente=newidCliente,
+            nueva_poliza = poliza(idCliente=newidCliente,
                                     idVehiculo=newIdVehiculo,
                                     idTipoCobertura=newtipoCobertura,
                                     estadoPoliza="Suspendida",
@@ -351,17 +349,15 @@ class polizaDAO():
         return id
     
 class polizaSegDAO():
-    def guardar(self,medida,newIdPolizaSeg,newIdPoliza):
+    def guardar(self,medida,newIdPoliza):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
         
         med=medida
         nIdPoliza=newIdPoliza
-        nIdPolizaSeg=newIdPolizaSeg
         try:
-            nuevo_polizaSeg=poliza_Seguridad(idPolizaSeguridad=nIdPolizaSeg,
-                                                idMedidaSeguridad=med,
+            nuevo_polizaSeg=poliza_Seguridad(idMedidaSeguridad=med,
                                                 idPoliza=nIdPoliza,
             )
             session.add(nuevo_polizaSeg)    
@@ -401,14 +397,13 @@ class cuotaDAO():
         session.close()
         return id
     
-    def guardar(self,newIdCuota,newIdPoliza,newNro,newCuota_time,newDes,newPrim,newImpo):
+    def guardar(self,newIdPoliza,newNro,newCuota_time,newDes,newPrim,newImpo):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
         
         try:
-            nueva_cuota = cuotas(idCuota=newIdCuota,
-                                    idPoliza=newIdPoliza,
+            nueva_cuota = cuotas(idPoliza=newIdPoliza,
                                     cuotaNro=newNro,
                                     fechaVencimiento=newCuota_time,
                                     descuento=newDes,
@@ -437,14 +432,13 @@ class vehiculoDAO():
         session.close()
         return id
     
-    def guardar(self,newIdVehiculo,newPatente,newIdModelo,newIdSini,newIdFactor,newAnioVehiculo,newKilometrosAnio,newChasis,newMotor):
+    def guardar(self,newPatente,newIdModelo,newIdSini,newIdFactor,newAnioVehiculo,newKilometrosAnio,newChasis,newMotor):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
         
         try:
             nuevo_vehiculo = vehiculo(patente=newPatente,
-                                        idVehiculo=newIdVehiculo,
                                         idModelo=newIdModelo,
                                         idSiniestros=newIdSini,
                                         idFactorKm=newIdFactor,

@@ -274,8 +274,5 @@ class Ingreso_datos_poliza():
          self.busqueda_cliente.interfaz.show()
          self.interfaz.close()
          
-    def finalizar(self):
-        self.busqueda_cliente.volver()
-        self.interfaz.close() 
     
     

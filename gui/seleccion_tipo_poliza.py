@@ -126,5 +126,5 @@ class Seleccion_tipo_poliza():
             print(f"Error en interfaz fecha 2: {e}")
             
     def finalizar(self):
-        self.ingreso_datos_poliza.finalizar()
+        self.ingreso_datos_poliza.volver()
         self.interfaz.close()
