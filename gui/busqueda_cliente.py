@@ -26,17 +26,26 @@ class Busqueda_cliente():
         self.interfaz.rb10.clicked.connect(self.innit_table)
         self.interfaz.rb20.clicked.connect(self.innit_table)
         self.interfaz.rb30.clicked.connect(self.innit_table)
-        #self.interfaz.tableDatosClientes.itemClicked.connect(self.ordenarTablaPorColumna)
-        self.interfaz.tableDatosClientes.selectionModel().selectionChanged.connect(self.ordenarTablaPorColumna)        
+        self.interfaz.tableDatosClientes.horizontalHeader().sectionClicked.connect(self.ordenarTablaPorColumna)
+       
         
-    def ordenarTablaPorColumna(self, selected, deselected):
-        #esto es un ejemplo de algo para ordenar las tablas, despues lo termino
-        for ix in selected.indexes():
-            print("Selected Cell Location Row: {0}, Column: {1}".format(ix.row(), ix.column()))
-        
-        for ix in selected.indexes():
-            print("Deselected Cell Location Row: {0}, Column: {1}".format(ix.row(), ix.column()))
-            
+    def ordenarTablaPorColumna(self, columnIndex):
+        if columnIndex == 0:
+            self.lista_clientes.sort(key=lambda cliente: cliente.idCliente)
+            self.mostrar_pag(self.lista_clientes)
+        elif columnIndex == 1:
+            self.lista_clientes.sort(key=lambda cliente: cliente.nombre)
+            self.mostrar_pag(self.lista_clientes)
+        elif columnIndex == 2:
+            self.lista_clientes.sort(key=lambda cliente: cliente.apellido)
+            self.mostrar_pag(self.lista_clientes)
+        elif columnIndex == 3:
+            self.lista_clientes.sort(key=lambda cliente: cliente.tipoDocumento)
+            self.mostrar_pag(self.lista_clientes)
+        elif columnIndex == 4:
+            self.lista_clientes.sort(key=lambda cliente: cliente.numeroDocumento)
+            self.mostrar_pag(self.lista_clientes)
+
     def initComboBox_Documentos(self):
         try:
             gestor = GestorCliente()
