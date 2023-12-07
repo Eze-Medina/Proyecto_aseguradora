@@ -1,5 +1,5 @@
 from PyQt6 import uic, QtWidgets
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSlot
 from PyQt6.QtWidgets import QMessageBox, QApplication, QMainWindow, QTableWidget, QTableWidgetItem, QDialog
 from gui.ingreso_datos_poliza import Ingreso_datos_poliza
 from gui.aviso import Aviso
@@ -26,7 +26,17 @@ class Busqueda_cliente():
         self.interfaz.rb10.clicked.connect(self.innit_table)
         self.interfaz.rb20.clicked.connect(self.innit_table)
         self.interfaz.rb30.clicked.connect(self.innit_table)
+        #self.interfaz.tableDatosClientes.itemClicked.connect(self.ordenarTablaPorColumna)
+        self.interfaz.tableDatosClientes.selectionModel().selectionChanged.connect(self.ordenarTablaPorColumna)        
         
+    def ordenarTablaPorColumna(self, selected, deselected):
+        #esto es un ejemplo de algo para ordenar las tablas, despues lo termino
+        for ix in selected.indexes():
+            print("Selected Cell Location Row: {0}, Column: {1}".format(ix.row(), ix.column()))
+        
+        for ix in selected.indexes():
+            print("Deselected Cell Location Row: {0}, Column: {1}".format(ix.row(), ix.column()))
+            
     def initComboBox_Documentos(self):
         try:
             gestor = GestorCliente()
