@@ -4,6 +4,7 @@ from model.modelDTO import ClienteDTO, polizaDTO
 from logica.gestor import GestorPoliza
 from datetime import datetime, timedelta
 from dateutil.relativedelta import *
+from gui.aviso import Aviso
 
 class Confirmacion_poliza_1():
     def __init__(self,seleccion_tipo_poliza,clienteDTO,polizaDTO):
@@ -29,7 +30,6 @@ class Confirmacion_poliza_1():
             
         except Exception as e:
             print(f"Error en muestra: {e}")
-        print(polizaDTO)
         self.initFechas()   
         self.btnVolver()
         self.btnImprimir()
@@ -48,7 +48,7 @@ class Confirmacion_poliza_1():
             print(f"Error en fecha3: {e}")
        
     def btnVolver(self):
-         self.interfaz.btnVolver.clicked.connect(self.volver)
+        self.interfaz.btnVolver.clicked.connect(self.volver)
         
     def volver(self):
         self.seleccion_tipo_poliza.interfaz.show()
@@ -59,8 +59,18 @@ class Confirmacion_poliza_1():
     
     def guardar(self):
         gestor = GestorPoliza()
-        gestor.guardar_Poliza(self.datosPoliza,self.datosCliente)
-        self.finalizar()
+        try:
+            error = gestor.verificar_datos(self.datosPoliza)
+            print(error)
+            
+        except Exception as e:
+            print(f"Error en guardar poliza al verificar_datos(): {e}")
+            
+        if error != "":
+          self.aviso=Aviso(self,error)
+        else: 
+            gestor.guardar_Poliza(self.datosPoliza,self.datosCliente)
+            self.finalizar()
         
     def finalizar(self):
         self.seleccion_tipo_poliza.finalizar()

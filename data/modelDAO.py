@@ -296,6 +296,22 @@ class hijoDAO():
         session.close()
 
 class polizaDAO():
+    def comprobar_existencia(self, idVehiculo):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        
+        try:
+            poliza_encontrada = session.query(poliza)\
+                .filter(and_(
+                    poliza.idVehiculo == idVehiculo,
+                    poliza.estadoPoliza != 'Suspendida'
+                )).first()
+            
+            return poliza_encontrada
+            
+        except Exception as e:
+            print(f"Error en polizaDAO comprobar_existencia(): {e}")
     
     def guardar(self,newidCliente,newIdVehiculo,newtipoCobertura,newfechaFinVigencia,newfechaInicio,newsumaAsegurada):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
@@ -452,6 +468,20 @@ class vehiculoDAO():
         except Exception as e:
             print(f"Error en vehiculoDAO guardar(): {e}")
         session.close()  
+        
+    def buscar_vehiculo(self, polizaDTO: polizaDTO):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        
+        try:
+            vehiculo_encontrado = session.query(vehiculo)\
+                .filter_by(
+                    patente=polizaDTO.patente
+                ).first()
+            return vehiculo_encontrado
+        except Exception as e:
+            print(f"Error en vehiculoDAO buscar_vehiculo(): {e}")
         
 class factorKmDAO():
     def buscar_id(self,kilometros):

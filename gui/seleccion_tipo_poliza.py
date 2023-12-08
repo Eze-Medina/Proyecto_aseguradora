@@ -20,7 +20,6 @@ class Seleccion_tipo_poliza():
         self.interfaz.txtTipoDocumento.setText(f"{clienteDTO.tipoDocumento}")
         self.interfaz.txtNumeroDocumento.setText(f"{clienteDTO.numeroDocumento}")
         
-        #print(polizaDTO)
         self.sumar_seis_meses_str() 
         self.innit_fechaInicio()
         self.btnConfirmar()

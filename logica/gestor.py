@@ -229,7 +229,25 @@ class GestorPoliza:
                     cuota_time = cuota_time + relativedelta(months=1)           
         except Exception as e:
             print(f"Error en CUOTAS(): {e}")
-
+            
+    def verificar_datos(self, polizaDTO: polizaDTO):
+        vehiculoDao = vehiculoDAO()
+        polizaDao = polizaDAO()
+        
+        try:
+            vehiculo_existente = vehiculoDao.buscar_vehiculo(polizaDTO)
+            print(vehiculo_existente.patente)
+        except Exception as e:
+            print(f"Error en verificar_datos() al buscar_vehiculo(): {e}")
+        if vehiculo_existente is None:
+            return ""
+        else:
+            poliza_encontrada = polizaDao.comprobar_existencia(vehiculo_existente.idVehiculo)
+            if poliza_encontrada is not None:
+                return "Vehiculo con poliza vigente"
+            else:
+                return ""
+        
 class GestorAseguradora:
     def recuperar_SumaAsegurada(self):
         return 15000
