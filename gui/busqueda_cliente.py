@@ -83,7 +83,33 @@ class Busqueda_cliente():
                 
         except Exception as e:
                 print(f"Error en verificacion: {e}")
-                
+    
+    def verificar_input(self):
+        try:
+            mensajes_error = []
+            numero = self.interfaz.txtNumero.text()
+            nombre = self.interfaz.txtNombre.text()
+            apellido = self.interfaz.txtApellido.text()
+            documento = self.interfaz.txtDocumento.text()
+
+            if numero and not numero.isdigit():
+                mensajes_error.append("Campo número de cliente debe ser un número")
+            if nombre and not nombre.isalpha():
+                mensajes_error.append("Campo nombre solo debe contener letras")
+            if apellido and not apellido.isalpha():
+                mensajes_error.append("Campo apellido solo debe contener letras")
+            if documento and (not documento.isdigit() or '.' in documento):
+                mensajes_error.append("Campo número de documento debe ser un número sin puntos")
+
+            if mensajes_error:
+                return "\n".join(mensajes_error)  # Devuelve todos los mensajes de error
+            else:
+                return ""
+
+        except Exception as e:
+            print(f"Error en verificación de input: {e}")
+
+                            
     def IngDatosPoliza(self):
         
         fila_seleccionada = self.interfaz.tableDatosClientes.currentRow()
@@ -107,7 +133,11 @@ class Busqueda_cliente():
             print(f"Error: {e}")
         
     def btnBuscar(self):
-        self.interfaz.btnBuscar.clicked.connect(self.obtener_clientes)
+        error = self.verificar_input()
+        if error != "":
+            self.aviso = Aviso(self, error)
+        else:    
+            self.interfaz.btnBuscar.clicked.connect(self.obtener_clientes)
     
     def btnSigPagina(self):
         self.interfaz.btnSigPagina.clicked.connect(self.pasarPagina)
@@ -187,10 +217,15 @@ class Busqueda_cliente():
                              nombre=self.interfaz.txtNombre.text(),
                              apellido=self.interfaz.txtApellido.text(),
                              tipoDocumento=self.interfaz.cbTipoDocumento.currentText())    
-            print(filtro)        
+                    
             lista_clientes = gestor.listar_clientes(filtro)
-            self.lista_clientes = lista_clientes
-            self.mostrar_pag(lista_clientes)
+            
+            if len(lista_clientes) == 0:
+                self.interfaz.tableDatosClientes.clearContents()
+                self.aviso=Aviso(self,'El cliente no existe')
+            else: 
+                self.lista_clientes = lista_clientes
+                self.mostrar_pag(lista_clientes)
             
         except Exception as e:
             print(f"Error en listar() dentro de busqueda_cliente: {e}")            
