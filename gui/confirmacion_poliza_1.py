@@ -61,7 +61,6 @@ class Confirmacion_poliza_1():
         gestor = GestorPoliza()
         try:
             error = gestor.verificar_datos(self.datosPoliza)
-            print(error)
             
         except Exception as e:
             print(f"Error en guardar poliza al verificar_datos(): {e}")

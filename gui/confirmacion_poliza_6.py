@@ -48,8 +48,17 @@ class Confirmacion_poliza_6():
     
     def guardar(self):
         gestor = GestorPoliza()
-        gestor.guardar_Poliza(self.datosPoliza,self.datosCliente)
-        self.finalizar()
+        try:
+            error = gestor.verificar_datos(self.datosPoliza)
+            
+        except Exception as e:
+            print(f"Error en guardar poliza al verificar_datos(): {e}")
+            
+        if error != "":
+          self.aviso=Aviso(self,error)
+        else: 
+            gestor.guardar_Poliza(self.datosPoliza,self.datosCliente)
+            self.finalizar()
             
     def initMesesPago(self):
         try:

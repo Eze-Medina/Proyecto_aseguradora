@@ -102,10 +102,6 @@ class polizaDTO():
         self.cantSiniestros = cantSiniestros
         self.hijos = []
         self.medidas= []
-        # self.medida1 = medida1
-        # self.medida2 = medida2
-        # self.medida3 = medida3
-        # self.medida4 = medida4
         self.tipoCobertura = tipoCobertura
         self.fechaInicioVigencia = fechaInicioVigencia
         self.fechaFinVigencia = fechaFinVigencia
