@@ -1,5 +1,6 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QMessageBox, QComboBox, QCheckBox, QVBoxLayout
+from PyQt6.QtWidgets import QMessageBox, QComboBox, QCheckBox, QVBoxLayout, QLabel, QApplication
+from PyQt6.QtCore import QDate
 from gui.confirmacion_poliza_1 import Confirmacion_poliza_1
 from gui.confirmacion_poliza_6 import Confirmacion_poliza_6
 from gui.aviso import Aviso
@@ -16,7 +17,7 @@ class Seleccion_tipo_poliza():
         self.interfaz.txtNombre.setText(f"{clienteDTO.nombre}")
         self.interfaz.txtApellido.setText(f"{clienteDTO.apellido}")
         self.interfaz.txtNumeroCliente.setText(f"{clienteDTO.idCliente}")
-        self.interfaz.txtDomicilio.setText(f"{clienteDTO.nombreVivienda}{clienteDTO.numeroVivienda}")
+        self.interfaz.txtDomicilio.setText(f"{clienteDTO.nombreVivienda} {clienteDTO.numeroVivienda}")
         self.interfaz.txtTipoDocumento.setText(f"{clienteDTO.tipoDocumento}")
         self.interfaz.txtNumeroDocumento.setText(f"{clienteDTO.numeroDocumento}")
         
@@ -28,18 +29,37 @@ class Seleccion_tipo_poliza():
     
     def verificar(self):
         try:
-            if ((self.interfaz.cbFormaPago.currentIndex()!= 0 and
-                 self.interfaz.txtFechaInicioVigencia.text() != "") and (
+            if ((self.interfaz.cbFormaPago.currentIndex()!= 0) and (
                  self.interfaz.rbRespCivil.isChecked() or
                  self.interfaz.rbIncendioTotel.isChecked() or
                  self.interfaz.rbTodoTotal.isChecked() or
                  self.interfaz.rbTercerosCompletos.isChecked() or
                  self.interfaz.rbTodoRiesgo.isChecked()
                 )):
-                    print("FUNCO LA VERIFICACION")
                     return True
         except Exception as e:
             print(f"Error en verificacion: {e}")
+    
+    def verificar_FechaInicio(self):
+        try:
+            fecha_actual = QDate.currentDate()
+            fecha_qlabel = QDate.fromString(self.interfaz.txtFechaInicioVigencia.text(), "dd/MM/yyyy")
+            
+            if fecha_qlabel.isValid():
+                diferencia_dias = fecha_actual.daysTo(fecha_qlabel)
+                
+                print(diferencia_dias)
+                if diferencia_dias < 0 or diferencia_dias > 30:
+                    self.aviso = Aviso(self, f'Fecha de inicio incorrecta, debe ser del {self.innit_fechaInicio()} en adelante y menor a 1 mes de la fecha actual')
+                    return False
+                else:
+                    return True
+            else:
+                self.aviso = Aviso(self, f'Fecha de inicio tiene un formato incorrecto, debe ser dd/mm/aaaa')
+                return False
+            
+        except Exception as e:
+            print(f"Error en verificacion de la FechaInicio(): {e}")
               
     def recuperarDatosPoliza(self):
         try:
@@ -71,26 +91,26 @@ class Seleccion_tipo_poliza():
             print(f"Error en recuperacion: {e}")
       
     def IngConfirmacion_poliza(self):
-          
-        if self.verificar():    
-            try:
-                self.recuperarDatosPoliza()
-                fp=self.interfaz.cbFormaPago.currentText()
-                print(self.datosPoliza)
-                if  fp == "Semestral":
-                    self.confirmacion_poliza_1 = Confirmacion_poliza_1(self,self.datosCliente,self.datosPoliza)
-                    self.interfaz.hide()
-                else:
-                    self.confirmacion_poliza_6 = Confirmacion_poliza_6(self,self.datosCliente,self.datosPoliza)
-                    self.interfaz.hide()  
-                
-            except Exception as e:
-                print(f"Error en muestra: {e}")  
-        else:    
-            try:
-                self.aviso=Aviso(self,'Completar los datos por favor')
-            except Exception as e:
-                print(f"Error: {e}")  
+        if self.verificar_FechaInicio():
+            if self.verificar():    
+                try:
+                    self.recuperarDatosPoliza()
+                    fp=self.interfaz.cbFormaPago.currentText()
+
+                    if  fp == "Semestral":
+                        self.confirmacion_poliza_1 = Confirmacion_poliza_1(self,self.datosCliente,self.datosPoliza)
+                        self.interfaz.hide()
+                    else:
+                        self.confirmacion_poliza_6 = Confirmacion_poliza_6(self,self.datosCliente,self.datosPoliza)
+                        self.interfaz.hide()  
+                    
+                except Exception as e:
+                    print(f"Error en muestra: {e}")  
+            else:    
+                try:
+                    self.aviso=Aviso(self,'Completar los datos por favor')
+                except Exception as e:
+                    print(f"Error: {e}")  
 
     def btnConfirmar(self):
         self.interfaz.btnConfirmar.clicked.connect(self.IngConfirmacion_poliza)

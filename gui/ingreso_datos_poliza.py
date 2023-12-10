@@ -218,7 +218,6 @@ class Ingreso_datos_poliza():
             self.datosPoliza.kilometrosAnio=int(self.interfaz.txtKilometrosAnio.text())
             self.datosPoliza.cantSiniestros=self.interfaz.cbNumeroSiniestros.currentText()
             
-            print(self.datosPoliza)
         except Exception as e:
             print(f"Error en recuperacion1: {e}")
         try:    
@@ -241,7 +240,6 @@ class Ingreso_datos_poliza():
             else:
                 pass
             
-            print(self.datosPoliza)
         except Exception as e:
             print(f"Error en recuperacion2: {e}")    
         

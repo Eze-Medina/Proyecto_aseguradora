@@ -102,7 +102,7 @@ class Busqueda_cliente():
                 mensajes_error.append("Campo número de documento debe ser un número sin puntos")
 
             if mensajes_error:
-                return "\n".join(mensajes_error)  # Devuelve todos los mensajes de error
+                return "\n".join(mensajes_error)
             else:
                 return ""
 
@@ -136,7 +136,7 @@ class Busqueda_cliente():
         error = self.verificar_input()
         if error != "":
             self.aviso = Aviso(self, error)
-        else:    
+        elif error == "":    
             self.interfaz.btnBuscar.clicked.connect(self.obtener_clientes)
     
     def btnSigPagina(self):
