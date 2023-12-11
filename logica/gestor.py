@@ -117,7 +117,15 @@ class GestorVehiculo:
         factorKmDao=factorKmDAO()
         factor=factorKmDao.buscarFactor(kilometrosAnio)
         return factor
-               
+    
+    def vehiculos_existentes(self, polizaDTO: polizaDTO):
+        vehiculoDao = vehiculoDAO()
+        try:
+            vehiculos_existente = vehiculoDao.buscar_vehiculo(polizaDTO)
+        except Exception as e:
+            print(f"Error en verificar_datos() al buscar_vehiculo(): {e}")
+        return vehiculos_existente
+             
 class GestorCliente:
     
     def listar_clientes(self, clienteDTO: ClienteDTO):
@@ -399,11 +407,10 @@ class GestorPoliza:
             print(f"Error en guardar poliza(): {e}")
             
     def verificar_datos(self, polizaDTO: polizaDTO):
-        vehiculoDao = vehiculoDAO()
+        gesVehiculo = GestorVehiculo()
         polizaDao = polizaDAO()
         año_actual = datetime.now().year
         diferencia = año_actual - polizaDTO.anioVehiculo
-        print(diferencia)
         
         if diferencia > 10 and polizaDTO.tipoCobertura != 1:
             return "Vehiculo con antiguedad mayor a 10 años, solo puede seleccionar cobertura de Responsabilidad Civil"
@@ -411,18 +418,31 @@ class GestorPoliza:
             pass
         
         try:
-            vehiculo_existente = vehiculoDao.buscar_vehiculo(polizaDTO)
+            vehiculos_existente = gesVehiculo.vehiculos_existentes(polizaDTO)
         except Exception as e:
             print(f"Error en verificar_datos() al buscar_vehiculo(): {e}")
-            
-        if vehiculo_existente is None:
+        
+        if not vehiculos_existente:
             return ""
         else:
-            poliza_encontrada = polizaDao.comprobar_existencia(vehiculo_existente.idVehiculo)
-            if poliza_encontrada is not None:
-                return "Vehiculo con poliza vigente - Revisar patente"
-            else:
-                return ""
+            contador = 1
+            for lista in vehiculos_existente:
+                if lista != []:
+                    for vehiculo in lista:
+                        poliza_encontrada = polizaDao.comprobar_existencia(vehiculo.idVehiculo)
+                        if poliza_encontrada is not None:
+                            if contador == 1:
+                                return "Vehiculo con poliza vigente - Revisar Patente"
+                            elif contador == 2:
+                                return "Vehiculo con poliza vigente - Revisar Chasis"
+                            elif contador == 3:
+                                return "Vehiculo con poliza vigente - Revisar Motor"
+                        else:
+                            pass
+                else:
+                    contador += 1
+        return ""
+
         
 class GestorAseguradora:
     def recuperar_SumaAsegurada(self):

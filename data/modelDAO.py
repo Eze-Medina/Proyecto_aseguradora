@@ -1,5 +1,5 @@
 from sqlalchemy.orm import sessionmaker, joinedload
-from sqlalchemy import create_engine, select, func, insert, desc, and_, asc
+from sqlalchemy import create_engine, select, func, insert, desc, and_, asc, or_
 from sqlalchemy.sql.functions import coalesce
 from model.models import cuotas,cliente, provincia, marca, localidad, modelo, estadoCivil, tipoCobertura, cantSiniestros, poliza, registroFactores, factoresUniversales, vehiculo, cambioEstado, medidaDeSeguridad, tipoCobertura, hijo, poliza_Seguridad, factorKm, tipoDocumento, tipoEstado
 from model.modelDTO import ClienteDTO, ProvinciaDTO, MarcaDTO, polizaDTO, hijoDTO
@@ -417,7 +417,7 @@ class polizaDAO():
             poliza_encontrada = session.query(poliza)\
                 .filter(and_(
                     poliza.idVehiculo == idVehiculo,
-                    poliza.estadoPoliza != 'Suspendida'
+                    poliza.estadoPoliza != "Suspendida"
                 )).first()
             
             return poliza_encontrada
@@ -597,13 +597,21 @@ class vehiculoDAO():
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
-        
+        vehiculos_encontrados = []
+
         try:
-            vehiculo_encontrado = session.query(vehiculo)\
-                .filter_by(
-                    patente=polizaDTO.patente
-                ).first()
-            return vehiculo_encontrado
+            query = session.query(vehiculo)
+
+            if polizaDTO.patente:
+                vehiculos_patente = query.filter(vehiculo.patente == polizaDTO.patente).all()
+                vehiculos_encontrados.append(vehiculos_patente)
+            if polizaDTO.motor:
+                vehiculos_chasis = query.filter(vehiculo.chasis == polizaDTO.chasis).all()
+                vehiculos_encontrados.append(vehiculos_chasis)
+            if polizaDTO.chasis:
+                vehiculos_motor = query.filter(vehiculo.motor == polizaDTO.motor).all()
+                vehiculos_encontrados.append(vehiculos_motor)   
+            return vehiculos_encontrados
         except Exception as e:
             print(f"Error en vehiculoDAO buscar_vehiculo(): {e}")
         

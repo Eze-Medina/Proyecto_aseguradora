@@ -48,7 +48,6 @@ class Seleccion_tipo_poliza():
             if fecha_qlabel.isValid():
                 diferencia_dias = fecha_actual.daysTo(fecha_qlabel)
                 
-                print(diferencia_dias)
                 if diferencia_dias < 0 or diferencia_dias > 30:
                     self.aviso = Aviso(self, f'Fecha de inicio incorrecta, debe ser del {self.innit_fechaInicio()} en adelante y menor a 1 mes de la fecha actual')
                     return False
