@@ -39,7 +39,7 @@ class Ingreso_datos_poliza():
     def initcomboBox_Hijos(self):
         gestor = GestorDatos()
         
-        sexo=["Femenino","Masculino"] #esta de mas esto?
+        sexo=["Femenino","Masculino"]
         for i in sexo:
             self.interfaz.cbSexo.addItem(i)
         

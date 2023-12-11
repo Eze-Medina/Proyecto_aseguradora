@@ -11,7 +11,6 @@ class Busqueda_cliente():
     def __init__(self,interfaz_general_1):
         self.interfaz = uic.loadUi("gui/busqueda_cliente.ui")
         self.interfaz_general_1=interfaz_general_1
-        # self.interfaz.btnBuscar.clicked.connect(self.btnBuscar)
         self.lista_clientes = []
         self.grupoRadioButton()
         self.btnSeleccionar()
@@ -102,7 +101,6 @@ class Busqueda_cliente():
       
     def grupoRadioButton(self):
         try:
-            # Grupo 1
             self.interfaz.buttonGroup_1 = QtWidgets.QButtonGroup()
             self.interfaz.buttonGroup_1.addButton(self.interfaz.rb10)
             self.interfaz.buttonGroup_1.addButton(self.interfaz.rb20)

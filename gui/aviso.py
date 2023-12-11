@@ -11,9 +11,7 @@ class Aviso():
         self.mostrar_aviso()
 
     def mostrar_aviso(self):
-        # Hacer la ventana modal
         self.aviso.setModal(True)
-        # Mostrar la ventana
         self.aviso.show()
         
     def btnAceptar(self):
