@@ -11,13 +11,14 @@ class Busqueda_cliente():
     def __init__(self,interfaz_general_1):
         self.interfaz = uic.loadUi("gui/busqueda_cliente.ui")
         self.interfaz_general_1=interfaz_general_1
-        self.interfaz.btnBuscar.clicked.connect(self.btnBuscar)
+        # self.interfaz.btnBuscar.clicked.connect(self.btnBuscar)
         self.lista_clientes = []
         self.grupoRadioButton()
         self.btnSeleccionar()
         self.initComboBox_Documentos()
         self.innit_table()
         self.btnVolver()
+        self.btnBuscar()
         self.verificar()
         self.btnSigPagina()
         self.btnAntPagina()
@@ -84,12 +85,15 @@ class Busqueda_cliente():
         self.interfaz.btnSeleccionar.clicked.connect(self.IngDatosPoliza)
         
     def btnBuscar(self):
+        self.interfaz.btnBuscar.clicked.connect(self.busqueda)
+    
+    def busqueda(self):
         error = self.verificar_input()
         if error != "":
             self.aviso = Aviso(self, error)
-        elif error == "":    
-            self.interfaz.btnBuscar.clicked.connect(self.obtener_clientes)
-      
+        else:    
+            self.obtener_clientes()
+            
     def btnSigPagina(self):
         self.interfaz.btnSigPagina.clicked.connect(self.pasarPagina)
         
@@ -138,7 +142,7 @@ class Busqueda_cliente():
                 mensajes_error.append("Campo apellido solo debe contener letras")
             if documento and (not documento.isdigit() or '.' in documento):
                 mensajes_error.append("Campo número de documento debe ser un número sin puntos")
-
+            print(f"{mensajes_error}")
             if mensajes_error:
                 return "\n".join(mensajes_error)
             else:
