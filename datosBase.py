@@ -75,6 +75,7 @@ try:
         session.add(vivienda)
 
     clientes = [
+        cliente(nombre='admin',apellido="admin",idCliente=1040000000,idVivienda=1,idDocumento=1,numeroDocumento=99999999),
         cliente(nombre="Ezequiel", apellido="Medina", idVivienda=1, idDocumento=1, numeroDocumento=41940644),
         cliente(nombre="Agustin", apellido="Medina", idVivienda=1, idDocumento=1, numeroDocumento=40646933),
         cliente(nombre="Marta", apellido="García", idVivienda=2, idDocumento=2, numeroDocumento=42345678),
@@ -185,11 +186,41 @@ try:
         session.add(factor)
 
     cambios = [
-        cambioEstado(idEstado= 2, idCliente=1, fechaCambio=datetime(year=2020, month=6, day=20)),
-        cambioEstado(idEstado= 2, idCliente=1, fechaCambio=datetime(year=2022, month=12, day=20))
+        cambioEstado(idEstado= 2, idCliente=1040000001, fechaCambio=datetime(year=2020, month=6, day=20)),
+        cambioEstado(idEstado= 2, idCliente=1040000001, fechaCambio=datetime(year=2022, month=12, day=20))
     ]    
     for cambio in cambios:
         session.add(cambio)
+        
+    polizas = [
+        poliza(idPoliza= 1040000000000, 
+               idCliente=1040000000, 
+               idTipoCobertura=3, 
+               idVehiculo=1, 
+               estadoPoliza='Suspendida',
+               fechaInicio=datetime(year=2023, month=6, day=20),
+               fechaFin=datetime(year=2023, month=12, day=20), 
+               sumaAsegurada=15000     
+        )
+    ]    
+    for poli in polizas:
+        session.add(poli)
+        
+    vehiculos=[
+        vehiculo(idVehiculo=1,
+                 patente='ADM MIN',
+                 idModelo=1,
+                 idFactorKm=1,
+                 idSiniestros=1,
+                 anioVehiculo=2020,
+                 kilometrosAnio=5000,
+                 chasis='ADM',
+                 motor='MIN'  
+        )
+    ]
+    for vehi in vehiculos:
+        session.add(vehi)
+        
 except Exception as e:
             print(f"Error en carga de datosBase: {e}")
             

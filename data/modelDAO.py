@@ -515,7 +515,7 @@ class cuotaDAO():
         Session = sessionmaker(engine)
         session = Session()
         
-        cuotas_a_actualizar = session.query(cuotas).filter_by(idPoliza=1).all()
+        cuotas_a_actualizar = session.query(cuotas).filter_by(idPoliza=1040000000001).all()
         
         for i, cuota in enumerate(cuotas_a_actualizar, start=1):
             cuota.idRecibo = i

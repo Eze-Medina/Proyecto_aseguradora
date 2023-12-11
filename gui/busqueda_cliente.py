@@ -28,6 +28,7 @@ class Busqueda_cliente():
         self.interfaz.rb30.clicked.connect(self.innit_table)
         self.interfaz.tableDatosClientes.horizontalHeader().sectionClicked.connect(self.ordenarTablaPorColumna)
        
+#------------------------------------------------------------------------------------------------------------------------------------------        
         
     def ordenarTablaPorColumna(self, columnIndex):
         if columnIndex == 0:
@@ -56,10 +57,45 @@ class Busqueda_cliente():
             
         except Exception as e:
             print(f"Error listar tipos de documentos: {e}")    
+                       
+    def innit_table(self):      
+        try:
+            if self.interfaz.rb10.isChecked():
+                self.interfaz.tableDatosClientes.setRowCount(10)
+                self.mostrar_pag(self.lista_clientes)
+
+            if self.interfaz.rb20.isChecked():
+                self.interfaz.tableDatosClientes.setRowCount(20)
+                self.mostrar_pag(self.lista_clientes)
+                
+            if self.interfaz.rb30.isChecked():
+                self.interfaz.tableDatosClientes.setRowCount(30)
+                self.mostrar_pag(self.lista_clientes)
+                
+        except Exception as e:
+            print(f"Error en innit table: {e}")
+
+#------------------------------------------------------------------------------------------------------------------------------------------ 
+
+    def btnAntPagina(self):
+        self.interfaz.btnAntPagina.clicked.connect(self.volverPagina)
            
     def btnSeleccionar(self):
         self.interfaz.btnSeleccionar.clicked.connect(self.IngDatosPoliza)
-
+        
+    def btnBuscar(self):
+        error = self.verificar_input()
+        if error != "":
+            self.aviso = Aviso(self, error)
+        elif error == "":    
+            self.interfaz.btnBuscar.clicked.connect(self.obtener_clientes)
+      
+    def btnSigPagina(self):
+        self.interfaz.btnSigPagina.clicked.connect(self.pasarPagina)
+        
+    def btnVolver(self):
+        self.interfaz.btnVolver.clicked.connect(self.volver)
+      
     def grupoRadioButton(self):
         try:
             # Grupo 1
@@ -70,6 +106,8 @@ class Busqueda_cliente():
            
         except Exception as e:
             print(f"Error al generar grupo de rb: {e}") 
+ 
+#------------------------------------------------------------------------------------------------------------------------------------------ 
             
     def verificar(self):
         try:
@@ -108,8 +146,9 @@ class Busqueda_cliente():
 
         except Exception as e:
             print(f"Error en verificación de input: {e}")
-
-                            
+                
+#------------------------------------------------------------------------------------------------------------------------------------------               
+                        
     def IngDatosPoliza(self):
         
         fila_seleccionada = self.interfaz.tableDatosClientes.currentRow()
@@ -131,16 +170,6 @@ class Busqueda_cliente():
                 
         except Exception as e:
             print(f"Error: {e}")
-        
-    def btnBuscar(self):
-        error = self.verificar_input()
-        if error != "":
-            self.aviso = Aviso(self, error)
-        elif error == "":    
-            self.interfaz.btnBuscar.clicked.connect(self.obtener_clientes)
-    
-    def btnSigPagina(self):
-        self.interfaz.btnSigPagina.clicked.connect(self.pasarPagina)
     
     def pasarPagina(self):
         try:
@@ -162,11 +191,7 @@ class Busqueda_cliente():
                 self.listar_pag(self.lista_clientes)
             
         except Exception as e:
-            print(f"Error en pasar pagina: {e}")
-    
-    
-    def btnAntPagina(self):
-        self.interfaz.btnAntPagina.clicked.connect(self.volverPagina)
+            print(f"Error en pasar pagina: {e}")  
     
     def volverPagina(self):
         try:
@@ -189,25 +214,7 @@ class Busqueda_cliente():
             
         except Exception as e:
             print(f"Error en pasar pagina: {e}")
-            
-             
-    def innit_table(self):      
-        try:
-            if self.interfaz.rb10.isChecked():
-                self.interfaz.tableDatosClientes.setRowCount(10)
-                self.mostrar_pag(self.lista_clientes)
-
-            if self.interfaz.rb20.isChecked():
-                self.interfaz.tableDatosClientes.setRowCount(20)
-                self.mostrar_pag(self.lista_clientes)
-                
-            if self.interfaz.rb30.isChecked():
-                self.interfaz.tableDatosClientes.setRowCount(30)
-                self.mostrar_pag(self.lista_clientes)
-                
-        except Exception as e:
-            print(f"Error en innit table: {e}")
-
+    
     def obtener_clientes(self):
         try:
             gestor = GestorCliente()
@@ -275,10 +282,7 @@ class Busqueda_cliente():
         elemento = QTableWidgetItem(text)
         elemento.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
         self.interfaz.tableDatosClientes.setItem(row, column, elemento)
-        
-    def btnVolver(self):
-        self.interfaz.btnVolver.clicked.connect(self.volver)
-        
+      
     def volver(self):
         self.interfaz_general_1.interfaz.show()
         self.interfaz.close()

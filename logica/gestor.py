@@ -321,9 +321,10 @@ class GestorPoliza:
        
         fechaInicio = datetime.strptime(polizaDTO.fechaInicioVigencia, '%d/%m/%Y').date()
         
-        # CREACION DE OBJETO: VEHICULO
+        
         try:
             
+            # CREACION DE OBJETO: VEHICULO
             gesVehiculo.guardar(polizaDTO)
             newIdVehiculo = gesVehiculo.vehiculo_id()
                 
