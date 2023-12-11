@@ -1,8 +1,8 @@
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from model.models import Base, tipoDocumento, cliente, pais, provincia, localidad, vivienda, marca, modelo, factoresUniversales, cuotas
-from model.models import cantSiniestros, tipoCobertura, medidaDeSeguridad, hijo, poliza, estadoCivil, factorKm, poliza_Seguridad, vehiculo
+from model.models import Base, tipoDocumento, cliente, pais, provincia, localidad, vivienda, marca, modelo, factoresUniversales, cuotas, tipoEstado
+from model.models import cantSiniestros, tipoCobertura, medidaDeSeguridad, hijo, poliza, estadoCivil, factorKm, poliza_Seguridad, vehiculo, cambioEstado
 
 engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
     
@@ -130,7 +130,16 @@ try:
     ]
     for estado in estados:
         session.add(estado)
-        
+    
+    tipoEstados=[
+        tipoEstado(tipoEstado="Inactivo"),
+        tipoEstado(tipoEstado="Activo"),
+        tipoEstado(tipoEstado="Normal"),
+        tipoEstado(tipoEstado="Platino")
+    ]   
+    for estado in tipoEstados:
+        session.add(estado)
+         
     cantidades = [
         cantSiniestros(cantidad="Ninguno",factorSiniestros=1),
         cantSiniestros(cantidad="Uno",factorSiniestros=1.2),
@@ -141,11 +150,11 @@ try:
         session.add(cantidad)
         
     tipoCoberturas = [
-        tipoCobertura(tipoCobertura="   Responsabilidad Civil",descripcion="",factorTipo=1.5),
-        tipoCobertura(tipoCobertura="   Resp. Civil, Robo o incendio total",descripcion="",factorTipo=1.5),
-        tipoCobertura(tipoCobertura="   Todo total",descripcion="",factorTipo=1.5),
-        tipoCobertura(tipoCobertura="   Terceros Completos",descripcion="",factorTipo=1.5),
-        tipoCobertura(tipoCobertura="   Todo Riesgo con Franquicia",descripcion="",factorTipo=1.5)
+        tipoCobertura(tipoCobertura="Responsabilidad Civil",descripcion="",factorTipo=1.5),
+        tipoCobertura(tipoCobertura="Resp. Civil, Robo o incendio total",descripcion="",factorTipo=1.5),
+        tipoCobertura(tipoCobertura="Todo total",descripcion="",factorTipo=1.5),
+        tipoCobertura(tipoCobertura="Terceros Completos",descripcion="",factorTipo=1.5),
+        tipoCobertura(tipoCobertura="Todo Riesgo con Franquicia",descripcion="",factorTipo=1.5)
     ]    
     for tipoCobertura in tipoCoberturas:
         session.add(tipoCobertura)
@@ -175,6 +184,12 @@ try:
     for factor in factorUni:
         session.add(factor)
 
+    cambios = [
+        cambioEstado(idEstado= 2, idCliente=1, fechaCambio=datetime(year=2020, month=6, day=20)),
+        cambioEstado(idEstado= 2, idCliente=1, fechaCambio=datetime(year=2022, month=12, day=20))
+    ]    
+    for cambio in cambios:
+        session.add(cambio)
 except Exception as e:
             print(f"Error en carga de datosBase: {e}")
             

@@ -94,7 +94,7 @@ class registroFactores(Base):
     segTuerca = Column(Integer)
     cantHijos = Column(Integer)
     estRoboModelo = Column(Integer)
-    estRoboMarca = Column(Integer)
+    riesgoProvincia = Column(Integer)
     riesgoLocalidad = Column(Integer)
     kilometraje = Column(Integer)
 
@@ -113,7 +113,6 @@ class cliente(Base):
     numeroDocumento = Column(Integer)
     nombre = Column(String(50))
     apellido = Column(String(50))
-    estadoCliente = Column(String(50))
     anioRegistro = Column(String(50))
 
     def __str__(self):
@@ -122,7 +121,35 @@ class cliente(Base):
     vivienda = relationship("vivienda")
     tipo_documento = relationship("tipoDocumento")
     polizas = relationship("poliza", back_populates="cliente")
+    cambioEstado = relationship("cambioEstado", back_populates="cliente")
 
+class tipoEstado(Base):
+    __tablename__ = 'tipoEstado'
+    
+    idEstado = Column(Integer, primary_key=True, autoincrement=True)
+    tipoEstado = Column(String(50))
+    descripcion = Column(String(50))
+    
+    def __str__(self):
+        return f"Estado: {self.tipoEstado}"
+    
+    cambioEstado = relationship("cambioEstado", back_populates="estado")
+    
+    
+class cambioEstado(Base):
+    __tablename__ = 'cambioEstado'
+    
+    idCambioEstado = Column(Integer(), primary_key=True, autoincrement=True)
+    idEstado = Column(Integer(), ForeignKey('tipoEstado.idEstado'))
+    idCliente = Column(Integer(), ForeignKey('cliente.idCliente'))
+    fechaCambio = Column(DateTime())
+    
+    def __str__(self):
+        return f"Cambio de estado: {self.fechaCambio} {self.idEstado}"
+    
+    estado = relationship("tipoEstado", back_populates="cambioEstado")
+    cliente = relationship("cliente", back_populates="cambioEstado")
+    
 class tipoDocumento(Base):
     __tablename__ = 'tipoDocumento'
     

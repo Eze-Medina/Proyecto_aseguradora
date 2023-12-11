@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker, joinedload
-from sqlalchemy import create_engine, select, func, insert, desc, and_
+from sqlalchemy import create_engine, select, func, insert, desc, and_, asc
 from sqlalchemy.sql.functions import coalesce
-from model.models import cuotas,cliente, provincia, marca, localidad, modelo, estadoCivil, cantSiniestros, poliza, vehiculo, medidaDeSeguridad, tipoCobertura, hijo, poliza_Seguridad, factorKm, tipoDocumento
+from model.models import cuotas,cliente, provincia, marca, localidad, modelo, estadoCivil, tipoCobertura, cantSiniestros, poliza, registroFactores, factoresUniversales, vehiculo, cambioEstado, medidaDeSeguridad, tipoCobertura, hijo, poliza_Seguridad, factorKm, tipoDocumento, tipoEstado
 from model.modelDTO import ClienteDTO, ProvinciaDTO, MarcaDTO, polizaDTO, hijoDTO
 from dateutil.relativedelta import relativedelta
 
@@ -71,6 +71,33 @@ class clienteDAO():
         session.close()
         return cliente_encontrado
     
+    def buscar_cliente_completo(self, clienteDTO: ClienteDTO):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+
+        try:
+            cliente_encontrado = session.query(cliente)\
+            .filter_by(
+                idCliente=clienteDTO.idCliente
+            )\
+            .options(
+                joinedload(cliente.tipo_documento),
+                joinedload(cliente.vivienda),
+                joinedload(cliente.polizas).options(
+                    joinedload(poliza.vehiculo).joinedload(vehiculo.cantSiniestros),
+                    joinedload(poliza.cuotas)
+                ),
+                joinedload(cliente.cambioEstado).joinedload(cambioEstado.estado)
+            )\
+            .first()
+            
+        except Exception as e:
+            print(f"Error en DAO buscar_cliente_completo(): {e}")
+
+        session.close()
+        return cliente_encontrado
+    
     def listar_documentos(self):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
@@ -84,7 +111,24 @@ class clienteDAO():
 
         session.close()
         return documentos
-        
+     
+class cambioEstadoDAO():
+    def guardar(self,newIdEstado,newIdCliente,newFecha):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        try:
+            nuevo_cambio = cambioEstado(idEstado=newIdEstado,
+                                        idCliente=newIdCliente,
+                                        fechaCambio=newFecha
+                )
+            session.add(nuevo_cambio)
+            session.commit()
+        except Exception as e:
+            print(f"Error en DAO guardar() en cambioEstadoDAO: {e}")
+        session.close()
+        pass
+    
 class provinciaDAO():
     def listar_provincias(self, provinciaDTO: ProvinciaDTO):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
@@ -116,6 +160,23 @@ class provinciaDAO():
 
         session.close()
         return provincia_encontrada
+    
+    def buscarFactor(self, filtro):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+
+        try:
+            provincia_encontrada = session.query(provincia)\
+            .filter_by(
+                nombre=filtro
+            ).first()
+            
+        except Exception as e:
+            print(f"Error en provinciaDAO buscarFactor(): {e}")
+
+        session.close()
+        return provincia_encontrada.riesgoProvincia
     
 class marcaDAO():
     def listar_marcas(self, marcaDTO: MarcaDTO):
@@ -167,6 +228,23 @@ class localidaDAO():
         session.close()       
         return localidades_encontradas
 
+    def buscarFactor(self, filtro):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+
+        try:
+            localidad_encontrada = session.query(localidad)\
+            .filter_by(
+                nombre=filtro
+            ).first()
+            
+        except Exception as e:
+            print(f"Error en localidaDAO buscarFactor(): {e}")
+
+        session.close()
+        return localidad_encontrada.riesgoLocalidad
+    
 class modeloDAO():
     def listar_modelos(self, marca):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
@@ -201,6 +279,23 @@ class modeloDAO():
         
         session.close()       
         return modelo_encontrado
+    
+    def buscarFactor(self,filtro):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+
+        try:
+            modelo_encontrado = session.query(modelo)\
+            .filter_by(
+                nombre=filtro
+            ).first()
+            
+        except Exception as e:
+            print(f"Error en modeloDAO buscarFactor(): {e}")
+        
+        session.close()       
+        return modelo_encontrado.factorRobo
     
 class estadoCivilDAO():
     def listar_estados(self):
@@ -263,6 +358,23 @@ class cantSiniestrosDAO():
         session.close()       
         return siniestro_encontrado.idSiniestros
     
+    def buscarFactor(self,filtro):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+
+        try:
+            siniestro_encontrado = session.query(cantSiniestros)\
+            .filter_by(
+                cantidad=filtro
+            ).first()
+            
+        except Exception as e:
+            print(f"Error en DAO buscarFactor() en cantSiniestrosDAO: {e}")
+        
+        session.close()       
+        return siniestro_encontrado.factorSiniestros
+              
 class hijoDAO():
     def ulimo_id(self):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
@@ -398,6 +510,18 @@ class polizaSegDAO():
         return id
     
 class cuotaDAO():
+    def cargarEj(self):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        
+        cuotas_a_actualizar = session.query(cuotas).filter_by(idPoliza=1).all()
+        
+        for i, cuota in enumerate(cuotas_a_actualizar, start=1):
+            cuota.idRecibo = i
+        session.commit()
+        session.close()
+        
     def ulimo_id(self):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
@@ -499,3 +623,96 @@ class factorKmDAO():
 
         session.close()
         return factor.idFactorKm
+    
+    def buscarFactor(self,filtro):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+
+        try:
+            factor = session.query(factorKm)\
+            .filter(
+                factorKm.rango>filtro
+            ).order_by(factorKm.rango).first()   
+        except Exception as e:
+            print(f"Error en factorKmDAO buscarFactor(): {e}")
+
+        session.close()
+        return factor.factorKm
+    
+class registroFactoresDAO():
+    def guardar(self,newIdPoliza, newFactorTipo, newFactorSini, newFactorGar, newFactorAla, newFactorRas, newFactorTue, newFactorHijo, newFactorMode, newFactorKilm, newFactorLoca, newFactorProv):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        
+        try:
+            nuevo_registro = registroFactores(idPoliza=newIdPoliza,
+                                                factorCobertura=newFactorTipo,
+                                                siniestro=newFactorSini,
+                                                segGarage=newFactorGar,
+                                                segAlarma=newFactorAla,
+                                                segRastreo=newFactorRas,
+                                                segTuerca=newFactorTue,
+                                                cantHijos=newFactorHijo,
+                                                estRoboModelo=newFactorMode,
+                                                kilometraje=newFactorKilm,
+                                                riesgoLocalidad=newFactorLoca,
+                                                riesgoProvincia=newFactorProv
+            )
+            session.add(nuevo_registro)
+            session.commit()
+        except Exception as e:
+            print(f"Error en vehiculoDAO guardar(): {e}")
+        session.close() 
+    
+class tipoCoberturaDAO():
+    def buscarFactor(self,filtro):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        
+        try:
+            factor = session.query(tipoCobertura)\
+            .filter(
+                tipoCobertura.idTipoCobertura==filtro
+            ).first()   
+        except Exception as e:
+            print(f"Error en tipoCoberturaDAO buscarFactor(): {e}")
+
+        session.close()
+        return factor.factorTipo
+    
+class medidaDeSeguridadDAO():
+    def buscarFactor(self,filtro):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        
+        try:
+            factor = session.query(medidaDeSeguridad)\
+            .filter(
+                medidaDeSeguridad.idMedidaSeguridad==filtro
+            ).first()   
+        except Exception as e:
+            print(f"Error en medidaDeSeguridadDAO buscarFactor(): {e}")
+
+        session.close()
+        return factor.factorMedida
+    
+class factorUniDAO():
+    def buscarFactorHijo(self):
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        
+        try:
+            factor = session.query(factoresUniversales)\
+            .filter(
+                factoresUniversales.idFactoresUniversales==1
+            ).first()   
+        except Exception as e:
+            print(f"Error en factorUniDAO buscarFactor(): {e}")
+
+        session.close()
+        return factor.factorHijo

@@ -226,19 +226,19 @@ class Ingreso_datos_poliza():
             if self.interfaz.chbGaraje.isChecked():
                 self.datosPoliza.medidas.append(1)
             else:
-                pass
+                self.datosPoliza.medidas.append(0)
             if (self.interfaz.chbAlarma.isChecked()):
                 self.datosPoliza.medidas.append(2)
             else:
-                pass
+                self.datosPoliza.medidas.append(0)
             if self.interfaz.chbRastreo.isChecked():
                 self.datosPoliza.medidas.append(3)
             else:
-                pass
+                self.datosPoliza.medidas.append(0)
             if self.interfaz.chbTuerca.isChecked():
                 self.datosPoliza.medidas.append(4)
             else:
-                pass
+                self.datosPoliza.medidas.append(0)
             
         except Exception as e:
             print(f"Error en recuperacion2: {e}")    
