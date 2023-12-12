@@ -427,6 +427,10 @@ class GestorPoliza:
         else:
             contador = 1
             for lista in vehiculos_existente:
+                try:
+                    print(f"{lista[0]}")
+                except Exception as e:
+                    pass
                 if lista != []:
                     for vehiculo in lista:
                         poliza_encontrada = polizaDao.comprobar_existencia(vehiculo.idVehiculo)
