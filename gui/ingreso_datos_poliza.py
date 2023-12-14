@@ -1,5 +1,6 @@
 from PyQt6 import uic
-from PyQt6.QtWidgets import QMessageBox, QComboBox, QCheckBox, QVBoxLayout
+from PyQt6.QtWidgets import QMessageBox, QComboBox, QCheckBox, QVBoxLayout, QTableWidgetItem
+from PyQt6.QtCore import Qt, QDate
 from gui.seleccion_tipo_poliza import Seleccion_tipo_poliza
 from gui.aviso import Aviso
 from logica.gestor import GestorDatos,GestorVehiculo,GestorUbicacion,GestorAseguradora
@@ -28,7 +29,6 @@ class Ingreso_datos_poliza():
         self.initSumaAsegurada()
         self.initcomboBox_NroSiniestro()
         self.initcomboBox_Hijos()
-        
         
         self.btnLimpiar()
         self.btnAgregar()
@@ -169,22 +169,57 @@ class Ingreso_datos_poliza():
                 print(f"Error en initSumaAsegurada(): {e}")
         else:
             pass
-        
-    def btnAgregar(self):
-        self.interfaz.btnAgregar.clicked.connect(self.agregarHijo)
-        
-    def agregarHijo(self):
-        sexoSeleccionado = self.interfaz.cbSexo.currentText()
-        estadoCivilSeleccionado = self.interfaz.cbEstadoCivil.currentText()
-        
-        nuevo_hijo=hijoDTO(sexo=sexoSeleccionado,estadoCivil=estadoCivilSeleccionado)
-        self.datosPoliza.hijos.append(nuevo_hijo)
-        
-        cant=int(self.interfaz.txtCantidadHijos.text())
-        self.interfaz.txtCantidadHijos.setText(f"{cant+1}")  
     
+    def btnAgregar(self):
+        self.interfaz.btnAgregar.clicked.connect(self.avisoAgregar)
+        
+    def avisoAgregar(self):
+        try:
+            errores = self.verificar_datos_hijos()
+            existen_errores = all(elemento == 0 for elemento in errores)
+            
+            if existen_errores:
+                self.agregarHijo()
+            else:
+                if errores[0] == 1:
+                    self.aviso=Aviso(self,"Fecha de nacimiento posee un formato incorrecto, debe ser dd/mm/aaaa")
+                elif errores[1] == 1:
+                    self.aviso=Aviso(self,"La edad de los hijos a declarar debe ser entre 18 y 30 años")
+                elif errores[2] == 1:
+                    self.aviso=Aviso(self,"Seleccione un el sexo del hijo")
+                elif errores[3] == 1:
+                    self.aviso=Aviso(self,"Seleccione un estado civil")
+        except Exception as e:
+            print(f"Error en avisoAgregar: {e}")   
+             
+    def agregarHijo(self):
+        try:
+            fechaNacimiento = datetime.strptime(self.interfaz.txtFechaNacimiento.text(), "%d/%m/%Y")
+            
+            nuevo_hijo = hijoDTO(fechaNacimiento=fechaNacimiento,
+                                sexo=self.interfaz.cbSexo.currentText(),
+                                estadoCivil=self.interfaz.cbEstadoCivil.currentText())
+            
+            new_row = self.interfaz.tableHijos.rowCount()
+            self.interfaz.tableHijos.insertRow(new_row)
+            
+            self.centrar_elemento(new_row, 0, self.interfaz.txtFechaNacimiento.text())
+            self.centrar_elemento(new_row, 1, nuevo_hijo.sexo)
+            self.centrar_elemento(new_row, 2, nuevo_hijo.estadoCivil)
+
+            
+            self.datosPoliza.hijos.append(nuevo_hijo)
+            
+        except Exception as e:
+            print(f"Error en agregarHijo: {e}")  
+            
+    def centrar_elemento(self, row, column, text):
+        elemento = QTableWidgetItem(text)
+        elemento.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.interfaz.tableHijos.setItem(row, column, elemento)
+        
     def btnLimpiar(self):
-        self.interfaz.btnLimpiar.clicked.connect(self.vaciarLista)
+        self.interfaz.btnLimpiar.clicked.connect(self.eliminarHijo)
     
     def verificar(self):
         try:
@@ -202,7 +237,31 @@ class Ingreso_datos_poliza():
                     return True
         except Exception as e:
             print(f"Error en verificacion: {e}")
+    
+    def verificar_datos_hijos(self):
+        incorrecto = [0 ,0, 0, 0]
         
+        fecha_actual = QDate.currentDate()
+        fecha_nacimiento = QDate.fromString(self.interfaz.txtFechaNacimiento.text(), "dd/MM/yyyy")
+        
+        try:
+            if fecha_nacimiento.isValid():
+                edad = fecha_nacimiento.daysTo(fecha_actual) // 365
+                if not (18 <= edad <= 30):
+                    incorrecto[1] = 1
+            else:
+                incorrecto[0] = 1
+                
+            if self.interfaz.cbSexo.currentIndex() == 0:
+                incorrecto[2] = 1
+            if self.interfaz.cbEstadoCivil.currentIndex() == 0:
+                incorrecto[3] = 1
+                        
+            return incorrecto
+        
+        except Exception as e:
+            print(f"Error en verificacion de datos hijos: {e}")
+            
     def recuperarDatosPoliza(self):
 
         try:
@@ -243,9 +302,18 @@ class Ingreso_datos_poliza():
         except Exception as e:
             print(f"Error en recuperacion2: {e}")    
         
-    def vaciarLista(self):
-        self.datosPoliza.hijos.clear()
-        self.interfaz.txtCantidadHijos.setText("0") 
+    def eliminarHijo(self):
+        try:
+            fila_seleccionada = self.interfaz.tableHijos.currentRow()
+
+            if fila_seleccionada >= 0:
+                self.interfaz.tableHijos.removeRow(fila_seleccionada)
+                del self.datosPoliza.hijos[fila_seleccionada]
+
+
+        except Exception as e:
+            print(f"Error en eliminarHijo: {e}")
+
 
     def IngSeleccionTipo(self):
         try:

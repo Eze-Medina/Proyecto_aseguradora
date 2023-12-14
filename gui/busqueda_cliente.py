@@ -5,7 +5,7 @@ from gui.ingreso_datos_poliza import Ingreso_datos_poliza
 from gui.aviso import Aviso
 from logica.gestor import GestorCliente
 from model.modelDTO import ClienteDTO
-
+from unidecode import unidecode
 
 class Busqueda_cliente():
     def __init__(self,interfaz_general_1):
@@ -18,7 +18,6 @@ class Busqueda_cliente():
         self.innit_table()
         self.btnVolver()
         self.btnBuscar()
-        self.verificar()
         self.btnSigPagina()
         self.btnAntPagina()
         self.interfaz.show()
@@ -52,7 +51,9 @@ class Busqueda_cliente():
             gestor = GestorCliente()
             lista_documentos = gestor.listar_documentos()
             
-            for documentos in lista_documentos:
+            lista_documento_ordenada = sorted(lista_documentos, key=lambda x: x.tipoDocumento)
+
+            for documentos in lista_documento_ordenada:
                 self.interfaz.cbTipoDocumento.addItem(documentos.tipoDocumento)
             
         except Exception as e:
@@ -110,19 +111,6 @@ class Busqueda_cliente():
             print(f"Error al generar grupo de rb: {e}") 
  
 #------------------------------------------------------------------------------------------------------------------------------------------ 
-            
-    def verificar(self):
-        try:
-            if (self.interfaz.txtNumero.text()== "" and 
-                self.interfaz.txtNombre.text()== "" and 
-                self.interfaz.txtApellido.text()== "" and 
-                self.interfaz.cbTipoDocumento.currentIndex()== 0 and
-                self.interfaz.txtDocumento.text()== ""
-                ):
-                return True
-                
-        except Exception as e:
-                print(f"Error en verificacion: {e}")
     
     def verificar_input(self):
         try:
@@ -219,12 +207,15 @@ class Busqueda_cliente():
     
     def obtener_clientes(self):
         try:
+            nombre_unicode = unidecode(self.interfaz.txtNombre.text()).lower()
+            apellido_unicode = unidecode(self.interfaz.txtApellido.text()).lower()
+            
             gestor = GestorCliente()
             
             filtro = ClienteDTO(idCliente=self.interfaz.txtNumero.text(),
                              numeroDocumento=self.interfaz.txtDocumento.text(),
-                             nombre=self.interfaz.txtNombre.text(),
-                             apellido=self.interfaz.txtApellido.text(),
+                             nombre=nombre_unicode,
+                             apellido=apellido_unicode,
                              tipoDocumento=self.interfaz.cbTipoDocumento.currentText())    
                     
             lista_clientes = gestor.listar_clientes(filtro)

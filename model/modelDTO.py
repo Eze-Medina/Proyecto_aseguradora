@@ -77,8 +77,8 @@ class cantSiniestrosDTO():
         return f"Nombre={self.cantidad}"
 
 class hijoDTO():
-    def __init__(self, edad="", sexo="", estadoCivil=""):
-        self.edad = edad
+    def __init__(self, fechaNacimiento="", sexo="", estadoCivil=""):
+        self.fechaNacimiento = fechaNacimiento
         self.sexo = sexo
         self.estadoCivil = estadoCivil
     

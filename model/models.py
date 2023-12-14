@@ -283,7 +283,7 @@ class hijo(Base):
     idEstadoCivil = Column(Integer, ForeignKey('estadoCivil.idEstadoCivil'))
     idRegistroCambios = Column(Integer, ForeignKey('registroCambiosPoliza.idRegistroCambios'))
     idPoliza = Column(Integer, ForeignKey('poliza.idPoliza'))
-    edad = Column(Integer)
+    fechaNacimiento = Column(DateTime())
     sexo = Column(String(50))
 
     def __str__(self):

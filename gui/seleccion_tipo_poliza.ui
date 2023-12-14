@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>1050</width>
     <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1000</width>
+    <width>1050</width>
     <height>700</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1000</width>
+    <width>1050</width>
     <height>700</height>
    </size>
   </property>
@@ -31,7 +31,7 @@
   <widget class="QPushButton" name="btnVolver">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>810</x>
      <y>620</y>
      <width>91</width>
      <height>31</height>
@@ -40,7 +40,6 @@
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -59,7 +58,7 @@ border-radius: 8px;
   <widget class="QPushButton" name="btnConfirmar">
    <property name="geometry">
     <rect>
-     <x>870</x>
+     <x>910</x>
      <y>620</y>
      <width>91</width>
      <height>31</height>
@@ -68,7 +67,6 @@ border-radius: 8px;
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -89,7 +87,7 @@ border-radius: 8px;
     <rect>
      <x>50</x>
      <y>80</y>
-     <width>901</width>
+     <width>951</width>
      <height>521</height>
     </rect>
    </property>
@@ -107,7 +105,7 @@ border-radius: 8px;
      <rect>
       <x>60</x>
       <y>10</y>
-      <width>781</width>
+      <width>831</width>
       <height>141</height>
      </rect>
     </property>
@@ -123,8 +121,8 @@ border-radius: 8px;
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>30</y>
+       <x>150</x>
+       <y>40</y>
        <width>51</width>
        <height>16</height>
       </rect>
@@ -136,8 +134,8 @@ border-radius: 8px;
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>60</y>
+       <x>150</x>
+       <y>70</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -149,8 +147,8 @@ border-radius: 8px;
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>90</y>
+       <x>150</x>
+       <y>100</y>
        <width>111</width>
        <height>16</height>
       </rect>
@@ -162,8 +160,8 @@ border-radius: 8px;
     <widget class="QLabel" name="label_19">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>0</y>
+       <x>380</x>
+       <y>10</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -175,8 +173,8 @@ border-radius: 8px;
     <widget class="QLabel" name="txtNombre">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>30</y>
+       <x>300</x>
+       <y>40</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -188,8 +186,8 @@ border-radius: 8px;
     <widget class="QLabel" name="txtNumeroCliente">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>60</y>
+       <x>300</x>
+       <y>70</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -201,8 +199,8 @@ border-radius: 8px;
     <widget class="QLabel" name="txtTipoDocumento">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>90</y>
+       <x>300</x>
+       <y>100</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -214,8 +212,8 @@ border-radius: 8px;
     <widget class="QLabel" name="txtApellido">
      <property name="geometry">
       <rect>
-       <x>580</x>
-       <y>30</y>
+       <x>610</x>
+       <y>40</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -227,8 +225,8 @@ border-radius: 8px;
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>430</x>
-       <y>60</y>
+       <x>460</x>
+       <y>70</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -240,8 +238,8 @@ border-radius: 8px;
     <widget class="QLabel" name="txtNumeroDocumento">
      <property name="geometry">
       <rect>
-       <x>580</x>
-       <y>90</y>
+       <x>610</x>
+       <y>100</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -253,8 +251,8 @@ border-radius: 8px;
     <widget class="QLabel" name="txtDomicilio">
      <property name="geometry">
       <rect>
-       <x>580</x>
-       <y>60</y>
+       <x>610</x>
+       <y>70</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -266,8 +264,8 @@ border-radius: 8px;
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>430</x>
-       <y>90</y>
+       <x>460</x>
+       <y>100</y>
        <width>111</width>
        <height>16</height>
       </rect>
@@ -279,8 +277,8 @@ border-radius: 8px;
     <widget class="QLabel" name="label_20">
      <property name="geometry">
       <rect>
-       <x>430</x>
-       <y>30</y>
+       <x>460</x>
+       <y>40</y>
        <width>51</width>
        <height>16</height>
       </rect>
@@ -295,7 +293,7 @@ border-radius: 8px;
      <rect>
       <x>20</x>
       <y>160</y>
-      <width>861</width>
+      <width>911</width>
       <height>341</height>
      </rect>
     </property>
@@ -311,7 +309,7 @@ border-radius: 8px;
     <widget class="QLineEdit" name="txtFechaInicioVigencia">
      <property name="geometry">
       <rect>
-       <x>580</x>
+       <x>650</x>
        <y>70</y>
        <width>221</width>
        <height>21</height>
@@ -350,7 +348,7 @@ border-radius: 8px;</string>
     <widget class="QLabel" name="label_16">
      <property name="geometry">
       <rect>
-       <x>530</x>
+       <x>600</x>
        <y>35</y>
        <width>281</width>
        <height>21</height>
@@ -368,7 +366,7 @@ border-radius: 8px;</string>
     <widget class="QComboBox" name="cbFormaPago">
      <property name="geometry">
       <rect>
-       <x>580</x>
+       <x>650</x>
        <y>160</y>
        <width>221</width>
        <height>21</height>
@@ -486,7 +484,7 @@ border-radius: 8px;</string>
     <widget class="QLabel" name="label_31">
      <property name="geometry">
       <rect>
-       <x>690</x>
+       <x>760</x>
        <y>120</y>
        <width>121</width>
        <height>31</height>
@@ -573,8 +571,8 @@ border-radius: 8px;</string>
     <rect>
      <x>-20</x>
      <y>-40</y>
-     <width>1031</width>
-     <height>80</height>
+     <width>1071</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -599,7 +597,6 @@ border-radius: 8px;</string>
      <font>
       <family>Segoe UI Semibold</family>
       <pointsize>14</pointsize>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -612,9 +609,9 @@ border-radius: 8px;</string>
    <property name="geometry">
     <rect>
      <x>-20</x>
-     <y>670</y>
-     <width>1031</width>
-     <height>80</height>
+     <y>669</y>
+     <width>1071</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -631,16 +628,15 @@ border-radius: 8px;</string>
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>40</y>
+     <y>50</y>
      <width>131</width>
-     <height>31</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Segoe UI Semibold</family>
      <pointsize>14</pointsize>
-     <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>

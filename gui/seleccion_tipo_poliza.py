@@ -54,7 +54,7 @@ class Seleccion_tipo_poliza():
                 else:
                     return True
             else:
-                self.aviso = Aviso(self, f'Fecha de inicio tiene un formato incorrecto, debe ser dd/mm/aaaa')
+                self.aviso = Aviso(self, f'Fecha de inicio posee un formato incorrecto, debe ser dd/mm/aaaa')
                 return False
             
         except Exception as e:

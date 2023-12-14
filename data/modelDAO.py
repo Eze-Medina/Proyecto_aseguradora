@@ -398,7 +398,7 @@ class hijoDAO():
         try:
             nuevo_hijo = hijo(idEstadoCivil=newIdEstado,
                                 idPoliza=newIdPoliza,
-                                edad=newEdad,
+                                fechaNacimiento=newEdad,
                                 sexo=newSexo
                 )
             session.add(nuevo_hijo)

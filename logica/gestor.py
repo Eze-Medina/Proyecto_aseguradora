@@ -256,7 +256,7 @@ class GestorDatos:
         try:
             for hijo in polizaDTO.hijos:
                 idEstado=estCivilDao.buscar_id(hijo.estadoCivil)
-                hijoDao.guardar(idEstado,newIdPoliza,hijo.edad,hijo.sexo)       
+                hijoDao.guardar(idEstado,newIdPoliza,hijo.fechaNacimiento,hijo.sexo)       
         except Exception as e:
             print(f"Error en HIJO(): {e}")
             

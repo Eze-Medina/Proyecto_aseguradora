@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>1050</width>
     <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1000</width>
+    <width>1050</width>
     <height>700</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>1000</width>
+    <width>1050</width>
     <height>700</height>
    </size>
   </property>
@@ -31,7 +31,7 @@
   <widget class="QPushButton" name="btnVolver">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>810</x>
      <y>620</y>
      <width>91</width>
      <height>31</height>
@@ -40,7 +40,6 @@
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -59,7 +58,7 @@ border-radius: 8px;
   <widget class="QPushButton" name="btnImprimir">
    <property name="geometry">
     <rect>
-     <x>870</x>
+     <x>910</x>
      <y>620</y>
      <width>91</width>
      <height>31</height>
@@ -68,7 +67,6 @@ border-radius: 8px;
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
@@ -89,7 +87,7 @@ border-radius: 8px;
     <rect>
      <x>50</x>
      <y>80</y>
-     <width>901</width>
+     <width>951</width>
      <height>521</height>
     </rect>
    </property>
@@ -107,7 +105,7 @@ border-radius: 8px;
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>861</width>
+      <width>911</width>
       <height>491</height>
      </rect>
     </property>
@@ -141,9 +139,9 @@ border-radius: 8px;
     <widget class="QFrame" name="frame_2">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>450</x>
        <y>230</y>
-       <width>451</width>
+       <width>461</width>
        <height>261</height>
       </rect>
      </property>
@@ -502,7 +500,7 @@ border-radius: 8px;
     <widget class="QLabel" name="txtApellido">
      <property name="geometry">
       <rect>
-       <x>600</x>
+       <x>630</x>
        <y>70</y>
        <width>141</width>
        <height>21</height>
@@ -520,7 +518,7 @@ border-radius: 8px;
     <widget class="QLabel" name="label_10">
      <property name="geometry">
       <rect>
-       <x>430</x>
+       <x>460</x>
        <y>70</y>
        <width>141</width>
        <height>21</height>
@@ -790,7 +788,7 @@ border-radius: 8px;
     <widget class="QLabel" name="label_23">
      <property name="geometry">
       <rect>
-       <x>430</x>
+       <x>460</x>
        <y>160</y>
        <width>141</width>
        <height>21</height>
@@ -808,7 +806,7 @@ border-radius: 8px;
     <widget class="QLabel" name="label_24">
      <property name="geometry">
       <rect>
-       <x>430</x>
+       <x>460</x>
        <y>190</y>
        <width>141</width>
        <height>21</height>
@@ -826,7 +824,7 @@ border-radius: 8px;
     <widget class="QLabel" name="txtModeloVehiculo">
      <property name="geometry">
       <rect>
-       <x>600</x>
+       <x>630</x>
        <y>160</y>
        <width>141</width>
        <height>21</height>
@@ -862,7 +860,7 @@ border-radius: 8px;
     <widget class="QLabel" name="txtMotor">
      <property name="geometry">
       <rect>
-       <x>600</x>
+       <x>630</x>
        <y>190</y>
        <width>141</width>
        <height>21</height>
@@ -920,8 +918,8 @@ border-radius: 8px;
     <rect>
      <x>-20</x>
      <y>-40</y>
-     <width>1031</width>
-     <height>80</height>
+     <width>1071</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -946,7 +944,6 @@ border-radius: 8px;
      <font>
       <family>Segoe UI Semibold</family>
       <pointsize>14</pointsize>
-      <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
@@ -959,9 +956,9 @@ border-radius: 8px;
    <property name="geometry">
     <rect>
      <x>-20</x>
-     <y>670</y>
-     <width>1031</width>
-     <height>80</height>
+     <y>669</y>
+     <width>1071</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -978,16 +975,15 @@ border-radius: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>40</y>
+     <y>50</y>
      <width>211</width>
-     <height>31</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Segoe UI Semibold</family>
      <pointsize>14</pointsize>
-     <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
