@@ -16,7 +16,6 @@ class poliza(Base):
     idPoliza = Column(Integer(),primary_key=True, autoincrement=True)
     idCliente = Column(Integer, ForeignKey('cliente.idCliente'))
     idTipoCobertura = Column(Integer, ForeignKey('tipoCobertura.idTipoCobertura'))
-    idVehiculo = Column(Integer, ForeignKey('vehiculo.idVehiculo'))
     estadoPoliza = Column(String(50))
     fechaInicio = Column(DateTime())
     fechaFin = Column(DateTime())
@@ -27,7 +26,7 @@ class poliza(Base):
         return f"Poliza: {self.idPoliza} {self.idCliente}"
     
     cliente = relationship('cliente', back_populates='polizas')
-    vehiculo = relationship('vehiculo')
+    vehiculo = relationship('vehiculo',uselist=False)
     cuotas = relationship('cuotas')
     hijo = relationship('hijo')
     tipoCobertura = relationship('tipoCobertura')
@@ -322,6 +321,7 @@ class vehiculo(Base):
     
     idVehiculo = Column(Integer(),primary_key=True, autoincrement=True)
     patente = Column(String(50))
+    idPoliza = Column(Integer, ForeignKey('poliza.idPoliza'))
     idModelo = Column(Integer, ForeignKey('modelo.idModelo'))
     idFactorKm = Column(Integer, ForeignKey('factorKm.idFactorKm'))
     idSiniestros = Column(Integer, ForeignKey('cantSiniestros.idSiniestros'))
@@ -373,7 +373,7 @@ class cantSiniestros(Base):
     factorSiniestros = Column(Integer)
 
     def __str__(self):
-        return self.idSiniestros
+        return f"cantidad: {self.cantidad}"
 
 
 class factorKm(Base):

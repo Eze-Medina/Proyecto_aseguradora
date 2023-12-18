@@ -191,36 +191,41 @@ try:
     ]    
     for cambio in cambios:
         session.add(cambio)
+    
+    try:    
+        poliza_admin =  poliza(idPoliza= 1040000000000, 
+                                idCliente=1040000000, 
+                                idTipoCobertura=3,
+                                estadoPoliza='ADMIN',
+                                fechaInicio=datetime(year=2023, month=6, day=20),
+                                fechaFin=datetime(year=2023, month=12, day=20), 
+                                sumaAsegurada=15000     
+                            )  
+    
+        poliza_admin.vehiculo=vehiculo(patente='ADM MIN',
+                                            idModelo=1,
+                                            idFactorKm=1,
+                                            idSiniestros=1,
+                                            anioVehiculo=2020,
+                                            kilometrosAnio=5000,
+                                            chasis='ADM',
+                                            motor='MIN'  
+                                    )
         
-    polizas = [
-        poliza(idPoliza= 1040000000000, 
-               idCliente=1040000000, 
-               idTipoCobertura=3, 
-               idVehiculo=1, 
-               estadoPoliza='Suspendida',
-               fechaInicio=datetime(year=2023, month=6, day=20),
-               fechaFin=datetime(year=2023, month=12, day=20), 
-               sumaAsegurada=15000     
-        )
-    ]    
-    for poli in polizas:
-        session.add(poli)
+        poliza_admin.cuotas=[cuotas(cuotaNro = 1,
+                                        fechaVencimiento = datetime(year=2023, month=9, day=11),
+                                        premio = 1000,
+                                        descuento = 100,
+                                        importeFinal = 900
+                                    )]
         
-    vehiculos=[
-        vehiculo(idVehiculo=1,
-                 patente='ADM MIN',
-                 idModelo=1,
-                 idFactorKm=1,
-                 idSiniestros=1,
-                 anioVehiculo=2020,
-                 kilometrosAnio=5000,
-                 chasis='ADM',
-                 motor='MIN'  
-        )
-    ]
-    for vehi in vehiculos:
-        session.add(vehi)
         
+        session.add(poliza_admin)
+    except Exception as e:
+            print(f"Error en carga de transaction: {e}")    
+    
+        
+    
 except Exception as e:
             print(f"Error en carga de datosBase: {e}")
             

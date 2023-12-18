@@ -1,8 +1,15 @@
+from sqlalchemy.orm import sessionmaker, joinedload
+from sqlalchemy import create_engine, select, func, insert, desc, and_, asc, or_
+from sqlalchemy.sql.functions import coalesce
+
+
 from datetime import datetime
-from data.modelDAO import clienteDAO, provinciaDAO, marcaDAO, localidaDAO, modeloDAO, estadoCivilDAO, factorKmDAO, registroFactoresDAO, medidaDeSeguridadDAO
-from data.modelDAO import cantSiniestrosDAO, hijoDAO, polizaDAO, DAO, polizaSegDAO, cuotaDAO, vehiculoDAO, cambioEstadoDAO, tipoCoberturaDAO, factorUniDAO
+from data.modelDAO import clienteDAO, provinciaDAO, marcaDAO, localidaDAO, modeloDAO, estadoCivilDAO, factorKmDAO, medidaDeSeguridadDAO
+from data.modelDAO import cantSiniestrosDAO, hijoDAO, polizaDAO, cuotaDAO, vehiculoDAO, cambioEstadoDAO, tipoCoberturaDAO, factorUniDAO
 from model.modelDTO import ClienteDTO, ProvinciaDTO, MarcaDTO, LocalidadDTO, modeloDTO
-from model.modelDTO import estadoCivilDTO, cantSiniestrosDTO, hijoDTO, polizaDTO
+from model.modelDTO import estadoCivilDTO, cantSiniestrosDTO, polizaDTO
+from model.models import cuotas, poliza, registroFactores, cliente
+from model.models import vehiculo, hijo, poliza_Seguridad
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
@@ -169,13 +176,13 @@ class GestorCliente:
     def actualizarEstado(self,clienteDTO: ClienteDTO):
         clienteDao=clienteDAO()
         cambioEstDao=cambioEstadoDAO()
-        cliente=clienteDao.buscar_cliente_completo(clienteDTO)
+        cliente_encontrado=clienteDao.buscar_cliente_completo(clienteDTO)
         fechaActual = datetime.now()
         
         try:
             primeraPoliza=True
             contador=0
-            for cambio in cliente.cambioEstado:
+            for cambio in cliente_encontrado.cambioEstado:
                 if cambio.estado.tipoEstado=='Normal':
                     primeraPoliza=False
                     break
@@ -184,7 +191,7 @@ class GestorCliente:
             
         try:
             existeSini=False
-            for poliza in cliente.polizas:
+            for poliza in cliente_encontrado.polizas:
                 fechaFin = poliza.fechaFin
                 diff=relativedelta(fechaActual,fechaFin).years
                 if ((diff<1)and(poliza.vehiculo.cantSiniestros.cantidad!='Ninguno')):
@@ -196,8 +203,8 @@ class GestorCliente:
         try:    
             existeImpago=False
             contador=1
-            for poliza in cliente.polizas:
-                if contador<len(cliente.polizas):
+            for poliza in cliente_encontrado.polizas:
+                if contador<len(cliente_encontrado.polizas):
                     for cuota in poliza.cuotas:
                         if cuota.idRecibo==None:
                             existeImpago=True
@@ -210,7 +217,7 @@ class GestorCliente:
             
         try:       
             existeIncont=False
-            for cambio in cliente.cambioEstado:
+            for cambio in cliente_encontrado.cambioEstado:
                 fechaCambio=cambio.fechaCambio
                 diff=relativedelta(fechaActual,fechaCambio).years
                 if (cambio.estado.tipoEstado=='Inactivo') and (diff<2):
@@ -223,13 +230,13 @@ class GestorCliente:
             print(f"{primeraPoliza}____{existeSini}____{existeImpago}____{existeIncont}")
             if primeraPoliza:
                 newIdEstado=3
-                cambioEstDao.guardar(newIdEstado,cliente.idCliente,fechaActual)
+                cambioEstDao.guardar(newIdEstado,cliente_encontrado.idCliente,fechaActual)
             elif (existeSini or existeImpago or existeIncont):
                 newIdEstado=3
-                cambioEstDao.guardar(newIdEstado,cliente.idCliente,fechaActual)
+                cambioEstDao.guardar(newIdEstado,cliente_encontrado.idCliente,fechaActual)
             else:
                 newIdEstado=4
-                cambioEstDao.guardar(newIdEstado,cliente.idCliente,fechaActual)
+                cambioEstDao.guardar(newIdEstado,cliente_encontrado.idCliente,fechaActual)
         except Exception as e:
             print(f"Error en actualizar poliza: {e}")
     
@@ -312,16 +319,35 @@ class GestorPoliza:
     def cargarEj(self):
         cuotaDao=cuotaDAO()
         cuotaDao.cargarEj()
+        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+        Session = sessionmaker(engine)
+        session = Session()
+        try:
+            cliente_encontrado = session.query(cliente)\
+                .filter_by(
+                    idCliente=1040000002
+                ).first()
+            print(cliente_encontrado.polizas[0].vehiculo.cantSiniestros)
+            for poliza in cliente_encontrado.polizas:
+                if (poliza.vehiculo.cantSiniestros.cantidad!='Ninguno'):
+                    print(cliente_encontrado.polizas[0].vehiculo.cantSiniestros)
+                    break
+        except Exception as e:    
+            print(f"Error en ej////////////////////: {e}")
     
     def guardar_Poliza(self, polizaDTO: polizaDTO, clienteDTO: ClienteDTO):
-        gesVehiculo=GestorVehiculo() 
-        gesDatos=GestorDatos()
         gesCliente=GestorCliente()
-        gesUbicacion=GestorUbicacion()
         polizaDao = polizaDAO()
-        poliSegDao = polizaSegDAO()
-        cuotaDao = cuotaDAO()
-        regFactor= registroFactoresDAO()
+        modeloDao = modeloDAO()
+        factorKmDao = factorKmDAO()
+        siniDao=cantSiniestrosDAO()
+        estCivilDao=estadoCivilDAO()
+        tipoCoberDao=tipoCoberturaDAO()
+        medidasDao=medidaDeSeguridadDAO()
+        factorUniDao=factorUniDAO()
+        localidadDao=localidaDAO()
+        provinciaDao=provinciaDAO()
+        
         
         # ////////////////////////polizaDao.guardar_poliza(polizaDTO, clienteDTO)/////////////////////////
         
@@ -329,80 +355,155 @@ class GestorPoliza:
        
         fechaInicio = datetime.strptime(polizaDTO.fechaInicioVigencia, '%d/%m/%Y').date()
         
-        
         try:
             
-            # CREACION DE OBJETO: VEHICULO
-            gesVehiculo.guardar(polizaDTO)
-            newIdVehiculo = gesVehiculo.vehiculo_id()
-                
-            # CREACION DE OBJETO: POLIZA
-            
-            polizaDao.guardar(clienteDTO.idCliente,newIdVehiculo,polizaDTO.tipoCobertura,
-                            polizaDTO.fechaFinVigencia,fechaInicio,polizaDTO.sumaAsegurada)
-            newIdPoliza = polizaDao.ulimo_id()
-                
-            # CREACION DE OBJETOS: POLIZA SEGURIDAD
-                   
-            for medida in polizaDTO.medidas:
-                poliSegDao.guardar(medida,newIdPoliza)
-               
-            # CREACION DE OBJETOS: HIJO
+        #/////////////////////////////////////CREAR Y GUARDAR POLIZA////////////////////////////////////////////
         
-            gesDatos.guardarHijos(polizaDTO,newIdPoliza) 
-                            
-            # CREACION DE OBJETO: CUOTAS
-            
-            newIdCuota = cuotaDao.ulimo_id()
-            newIdCuota += 1
-        
-            cuota_time = fechaInicio - timedelta(days=1)
-        
-            if polizaDTO.formaPago=="Semestral":
-                cuotaDao.guardar(newIdPoliza,1,cuota_time,100,1000,900)
-                
-            elif polizaDTO.formaPago=="Mensual":
-            
-                for i in range(1, 7):
-                    cuotaDao.guardar(newIdPoliza,i,cuota_time,100,1000,900/6)
-                    cuota_time = cuota_time + relativedelta(months=1)           
-
-            # CREACION DE OBJETO: REGISTROFACTORES
             try:
-                newFactorTipo=gesDatos.getFactorTipo(polizaDTO.tipoCobertura)
-                newFactorSini=gesDatos.getFactorSini(polizaDTO.cantSiniestros)
-                newFactorGar=gesDatos.getFactorGar(polizaDTO.medidas)
-                newFactorAla=gesDatos.getFactorAla(polizaDTO.medidas)
-                newFactorRas=gesDatos.getFactorRas(polizaDTO.medidas)
-                newFactorTue=gesDatos.getFactorTue(polizaDTO.medidas)
-                newFactorHijo=gesDatos.getFactorHijo()
-                newFactorMode=gesVehiculo.getFactorMode(polizaDTO.modeloVehiculo)
-                newFactorKilm=gesVehiculo.getFactorKilm(polizaDTO.kilometrosAnio)
-                newFactorLoca=gesUbicacion.getFactorLoca(polizaDTO.localidad)
-                newFactorProv=gesUbicacion.getFactorProv(polizaDTO.provincia)
-            except Exception as e:
-                print(f"Error en guardar poliza(): {e}")
+                new_poliza=poliza(idCliente=clienteDTO.idCliente, 
+                                    idTipoCobertura=polizaDTO.tipoCobertura,
+                                    estadoPoliza='Suspendida',
+                                    fechaInicio=fechaInicio,
+                                    fechaFin=polizaDTO.fechaFinVigencia, 
+                                    sumaAsegurada=float(polizaDTO.sumaAsegurada)     
+                                )
+            except Exception as e:    
+                print(f"Error en guardar poliza(poliza): {e}")
+                
+        #/////////////////////////////////////CREAR Y GUARDAR VEHICULO////////////////////////////////////////////    
+           
             try:
-                regFactor.guardar(
-                    newIdPoliza,
-                    newFactorTipo,
-                    newFactorSini,
-                    newFactorGar,
-                    newFactorAla,
-                    newFactorRas,
-                    newFactorTue,
-                    newFactorHijo,
-                    newFactorMode,
-                    newFactorKilm,
-                    newFactorLoca,
-                    newFactorProv
-                )
-            except Exception as e:
-                print(f"Error en guardar poliza(): {e}")
-            #ACTUALIZAR ESTADO:
+                modelo = modeloDao.buscar_modelo(polizaDTO.modeloVehiculo)
+                new_idModelo = modelo.idModelo
+                new_idFactorKm = factorKmDao.buscar_id(polizaDTO.kilometrosAnio)
+                new_idSini= siniDao.buscar_id(polizaDTO.cantSiniestros)
+                
+                new_poliza.vehiculo=vehiculo(patente=polizaDTO.patente,
+                                                idModelo=new_idModelo,
+                                                idFactorKm=new_idFactorKm,
+                                                idSiniestros=new_idSini,
+                                                anioVehiculo=int(polizaDTO.anioVehiculo),
+                                                kilometrosAnio=int(polizaDTO.kilometrosAnio),
+                                                chasis=polizaDTO.chasis,
+                                                motor=polizaDTO.motor
+                                            )
+            except Exception as e:    
+                print(f"Error en guardar poliza(vehiculo): {e}")
+        
+        #/////////////////////////////////////CREAR Y GUARDAR MEDIDAS////////////////////////////////////////////
+                
+            try:
+                for medida in polizaDTO.medidas:
+                    if medida!=0:
+                        new_polSeg = poliza_Seguridad(idMedidaSeguridad=medida)
+                        new_poliza.poliza_Seguridad.append(new_polSeg)
+            except Exception as e:    
+                print(f"Error en guardar poliza(medidas): {e}")
+        
+        #/////////////////////////////////////CREAR Y GUARDAR HIJOS////////////////////////////////////////////
+                
+            try:
+                for listaHijo in polizaDTO.hijos:
+                    idEstado=estCivilDao.buscar_id(listaHijo.estadoCivil)
+                    new_hijo=hijo(idEstadoCivil=idEstado,
+                                    fechaNacimiento=listaHijo.fechaNacimiento,
+                                    sexo=listaHijo.sexo)
+                    new_poliza.hijo.append(new_hijo)
+            except Exception as e:    
+                print(f"Error en guardar poliza(hijos): {e}")
+        
+        #/////////////////////////////////////CREAR Y GUARDAR CUOTAS////////////////////////////////////////////
+                
+            try:
+                cuota_time = fechaInicio - timedelta(days=1)
+                new_premio=1000
+                new_descuento=100
+                new_importe=900
+                
+                if polizaDTO.formaPago=="Semestral":
+                    new_poliza.cuotas=cuotas(cuotaNro = 1,
+                                                fechaVencimiento = cuota_time,
+                                                premio = new_premio,
+                                                descuento = new_descuento,
+                                                importeFinal = new_importe
+                                        )
+                    
+                elif polizaDTO.formaPago=="Mensual":
+                
+                    for i in range(1, 7): 
+                        new_cuota=cuotas(cuotaNro = i,
+                                            fechaVencimiento = cuota_time,
+                                            premio = new_premio,
+                                            descuento = new_descuento,
+                                            importeFinal = (new_importe/6)
+                                        )
+                        new_poliza.cuotas.append(new_cuota)
+                        cuota_time = cuota_time + relativedelta(months=1)  
+            except Exception as e:    
+                print(f"Error en guardar poliza(cuota): {e}")
+            
+        #/////////////////////////////////////CREAR Y GUARDAR REGISTRO DE FACTORES////////////////////////////////////////////
+            
+            try:
+                factores=[]
+                factores.append(tipoCoberDao.buscarFactor(polizaDTO.tipoCobertura))
+                factores.append(siniDao.buscarFactor(polizaDTO.cantSiniestros))
+                
+                if polizaDTO.medidas[0]==1:
+                    factores.append(medidasDao.buscarFactor(polizaDTO.medidas[0]))
+                else:
+                    factores.append(1)
+                if polizaDTO.medidas[1]==2:
+                    factores.append(medidasDao.buscarFactor(polizaDTO.medidas[1]))
+                else:
+                    factores.append(1)
+                if polizaDTO.medidas[2]==3:
+                    factores.append(medidasDao.buscarFactor(polizaDTO.medidas[2]))
+                else:
+                    factores.append(1)
+                if polizaDTO.medidas[3]==4:
+                    factores.append(medidasDao.buscarFactor(polizaDTO.medidas[3]))
+                else:
+                    factores.append(1)
+                
+                factores.append(factorUniDao.buscarFactorHijo())
+                factores.append(modeloDao.buscarFactor(polizaDTO.modeloVehiculo))
+                factores.append(factorKmDao.buscarFactor(polizaDTO.kilometrosAnio))
+                factores.append(localidadDao.buscarFactor(polizaDTO.localidad))
+                factores.append(provinciaDao.buscarFactor(polizaDTO.provincia))
+                
+                    
+                
+                new_poliza.registroFactores=[registroFactores(factorCobertura = factores[0],
+                                                                siniestro = factores[1],
+                                                                segGarage = factores[2],
+                                                                segAlarma = factores[3],
+                                                                segRastreo = factores[4],
+                                                                segTuerca = factores[5],
+                                                                cantHijos = factores[6],
+                                                                estRoboModelo = factores[7],
+                                                                kilometraje = factores[8],
+                                                                riesgoLocalidad = factores[9],
+                                                                riesgoProvincia = factores[10] 
+                                                            )]
+            
+            except Exception as e:    
+                print(f"Error en guardar poliza(registro factores): {e}")
+        
+        
+                  
+        except Exception as e:    
+            print(f"Error en guardar poliza: {e}")
+           
+        try:
+            #/////////////////////////////////////--GUARDAR--////////////////////////////////////////////
+            
+            polizaDao.guardar(new_poliza)
+            
+            #/////////////////////////////////////--ACTUALIZAR ESTADO--////////////////////////////////////////////
             
             gesCliente.actualizarEstado(clienteDTO)
-        
+            
         except Exception as e:
             print(f"Error en guardar poliza(): {e}")
             

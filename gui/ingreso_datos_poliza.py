@@ -286,14 +286,17 @@ class Ingreso_datos_poliza():
                 self.datosPoliza.medidas.append(1)
             else:
                 self.datosPoliza.medidas.append(0)
+                
             if (self.interfaz.chbAlarma.isChecked()):
                 self.datosPoliza.medidas.append(2)
             else:
                 self.datosPoliza.medidas.append(0)
+                
             if self.interfaz.chbRastreo.isChecked():
                 self.datosPoliza.medidas.append(3)
             else:
                 self.datosPoliza.medidas.append(0)
+                
             if self.interfaz.chbTuerca.isChecked():
                 self.datosPoliza.medidas.append(4)
             else:

@@ -425,23 +425,15 @@ class polizaDAO():
         except Exception as e:
             print(f"Error en polizaDAO comprobar_existencia(): {e}")
     
-    def guardar(self,newidCliente,newIdVehiculo,newtipoCobertura,newfechaFinVigencia,newfechaInicio,newsumaAsegurada):
+    def guardar(self,newPoliza):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
         try:
-            nueva_poliza = poliza(idCliente=newidCliente,
-                                    idVehiculo=newIdVehiculo,
-                                    idTipoCobertura=newtipoCobertura,
-                                    estadoPoliza="Suspendida",
-                                    fechaInicio=newfechaInicio,
-                                    fechaFin=newfechaFinVigencia,
-                                    sumaAsegurada=float(newsumaAsegurada)
-            )
-            session.add(nueva_poliza)
+            session.add(newPoliza)
             session.commit()
         except Exception as e:
-            print(f"Error en POLIZA(): {e}")
+            print(f"Error en polizaDAO, guardar(): {e}")
         session.close()
             
     def buscar_poliza(self, filtro):
