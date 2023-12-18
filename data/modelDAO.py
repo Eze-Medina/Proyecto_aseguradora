@@ -113,15 +113,11 @@ class clienteDAO():
         return documentos
      
 class cambioEstadoDAO():
-    def guardar(self,newIdEstado,newIdCliente,newFecha):
+    def guardar(self,nuevo_cambio):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
         try:
-            nuevo_cambio = cambioEstado(idEstado=newIdEstado,
-                                        idCliente=newIdCliente,
-                                        fechaCambio=newFecha
-                )
             session.add(nuevo_cambio)
             session.commit()
         except Exception as e:
@@ -419,7 +415,6 @@ class polizaDAO():
                     poliza.idPoliza == idPoliza,
                     poliza.estadoPoliza != "Suspendida"
                 )).first()
-            print(f'poliza_encontrada')
             return poliza_encontrada
             
         except Exception as e:
