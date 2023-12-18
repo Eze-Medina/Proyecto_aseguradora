@@ -238,7 +238,7 @@ class Ingreso_datos_poliza():
             print(f"Error en verificacion: {e}")
             
     def verificar_len(self):
-        len_invalido = [0,0,0]
+        len_invalido = [0,0,0,0]
         
         if not (len(self.interfaz.txtMotor.text()) <= 50):
             len_invalido[0] = 1
@@ -246,7 +246,9 @@ class Ingreso_datos_poliza():
             len_invalido[1] = 1
         if not (len(self.interfaz.txtPatente.text()) <= 50):
             len_invalido[2] = 1
-        
+        if not (int(self.interfaz.txtKilometrosAnio.text()) < 50000):
+            len_invalido[3] = 1
+            
         if (all(elemento == 0 for elemento in len_invalido) == True):
             return True
         else:
@@ -256,6 +258,8 @@ class Ingreso_datos_poliza():
                 self.aviso=Aviso(self,'El Chasis debe contener 50 caracteres o menos')
             if len_invalido[2] == 1:
                 self.aviso=Aviso(self,'La Patente debe contener 50 caracteres o menos')
+            if len_invalido[3] == 1:
+                self.aviso=Aviso(self,'Los kilometros por año deben ser menores a 50.000 Km/Año')
             return False
           
     def verificar_datos_hijos(self):
@@ -353,6 +357,7 @@ class Ingreso_datos_poliza():
                         self.aviso=Aviso(self,f'Error: {e}')
                 else:
                     pass
+                
         except Exception as e:
             print(f"Error: {e}")
 

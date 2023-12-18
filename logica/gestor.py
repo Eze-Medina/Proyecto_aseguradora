@@ -100,20 +100,20 @@ class GestorVehiculo:
         newIdVehiculo = vehiculoDao.ulimo_id()
         return newIdVehiculo
 
-    def guardar(self,polizaDTO: polizaDTO):
-        vehiculoDao = vehiculoDAO()
-        modeloDao = modeloDAO()
-        factorKmDao = factorKmDAO()
-        siniDao=cantSiniestrosDAO()
-        try:
-            modelo = modeloDao.buscar_modelo(polizaDTO.modeloVehiculo)
-            idModelo = modelo.idModelo
-            idFactorKm = factorKmDao.buscar_id(polizaDTO.kilometrosAnio)
-            idSini= siniDao.buscar_id(polizaDTO.cantSiniestros)
-            vehiculoDao.guardar(polizaDTO.patente,idModelo,idSini,idFactorKm,polizaDTO.anioVehiculo,polizaDTO.kilometrosAnio,
-                                polizaDTO.chasis,polizaDTO.motor)
-        except Exception as e:
-            print(f"Error en VEHICULO(): {e}") 
+    # def guardar(self,polizaDTO: polizaDTO):
+    #     vehiculoDao = vehiculoDAO()
+    #     modeloDao = modeloDAO()
+    #     factorKmDao = factorKmDAO()
+    #     siniDao=cantSiniestrosDAO()
+    #     try:
+    #         modelo = modeloDao.buscar_modelo(polizaDTO.modeloVehiculo)
+    #         idModelo = modelo.idModelo
+    #         idFactorKm = factorKmDao.buscar_id(polizaDTO.kilometrosAnio)
+    #         idSini= siniDao.buscar_id(polizaDTO.cantSiniestros)
+    #         vehiculoDao.guardar(polizaDTO.patente,idModelo,idSini,idFactorKm,polizaDTO.anioVehiculo,polizaDTO.kilometrosAnio,
+    #                             polizaDTO.chasis,polizaDTO.motor)
+    #     except Exception as e:
+    #         print(f"Error en VEHICULO(): {e}") 
       
     def getFactorMode(self,modeloVehiculo):
         modeloDao=modeloDAO()
@@ -257,15 +257,15 @@ class GestorDatos:
         newIdHijo += 1
         return newIdHijo
     
-    def guardarHijos(self,polizaDTO: polizaDTO,newIdPoliza):
-        estCivilDao=estadoCivilDAO()
-        hijoDao = hijoDAO()
-        try:
-            for hijo in polizaDTO.hijos:
-                idEstado=estCivilDao.buscar_id(hijo.estadoCivil)
-                hijoDao.guardar(idEstado,newIdPoliza,hijo.fechaNacimiento,hijo.sexo)       
-        except Exception as e:
-            print(f"Error en HIJO(): {e}")
+    # def guardarHijos(self,polizaDTO: polizaDTO,newIdPoliza):
+    #     estCivilDao=estadoCivilDAO()
+    #     hijoDao = hijoDAO()
+    #     try:
+    #         for hijo in polizaDTO.hijos:
+    #             idEstado=estCivilDao.buscar_id(hijo.estadoCivil)
+    #             hijoDao.guardar(idEstado,newIdPoliza,hijo.fechaNacimiento,hijo.sexo)       
+    #     except Exception as e:
+    #         print(f"Error en HIJO(): {e}")
             
     def getFactorTipo(self,tipoCobertura):
         tipoCoberDao=tipoCoberturaDAO()
