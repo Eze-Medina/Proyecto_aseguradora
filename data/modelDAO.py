@@ -391,24 +391,24 @@ class hijoDAO():
         session.close()
         return id
     
-    def guardar(self,newIdEstado,newIdPoliza,newEdad,newSexo):
-        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
-        Session = sessionmaker(engine)
-        session = Session()
-        try:
-            nuevo_hijo = hijo(idEstadoCivil=newIdEstado,
-                                idPoliza=newIdPoliza,
-                                fechaNacimiento=newEdad,
-                                sexo=newSexo
-                )
-            session.add(nuevo_hijo)
-            session.commit()
-        except Exception as e:
-            print(f"Error en DAO guardar() en hijoDAO: {e}")
-        session.close()
+    # def guardar(self,newIdEstado,newIdPoliza,newEdad,newSexo):
+    #     engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+    #     Session = sessionmaker(engine)
+    #     session = Session()
+    #     try:
+    #         nuevo_hijo = hijo(idEstadoCivil=newIdEstado,
+    #                             idPoliza=newIdPoliza,
+    #                             fechaNacimiento=newEdad,
+    #                             sexo=newSexo
+    #             )
+    #         session.add(nuevo_hijo)
+    #         session.commit()
+    #     except Exception as e:
+    #         print(f"Error en DAO guardar() en hijoDAO: {e}")
+    #     session.close()
 
 class polizaDAO():
-    def comprobar_existencia(self, idVehiculo):
+    def comprobar_existencia(self, idPoliza):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
         Session = sessionmaker(engine)
         session = Session()
@@ -416,10 +416,10 @@ class polizaDAO():
         try:
             poliza_encontrada = session.query(poliza)\
                 .filter(and_(
-                    poliza.idVehiculo == idVehiculo,
+                    poliza.idPoliza == idPoliza,
                     poliza.estadoPoliza != "Suspendida"
                 )).first()
-            
+            print(f'poliza_encontrada')
             return poliza_encontrada
             
         except Exception as e:
@@ -469,22 +469,22 @@ class polizaDAO():
         return id
     
 class polizaSegDAO():
-    def guardar(self,medida,newIdPoliza):
-        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
-        Session = sessionmaker(engine)
-        session = Session()
+    # def guardar(self,medida,newIdPoliza):
+    #     engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+    #     Session = sessionmaker(engine)
+    #     session = Session()
         
-        med=medida
-        nIdPoliza=newIdPoliza
-        try:
-            nuevo_polizaSeg=poliza_Seguridad(idMedidaSeguridad=med,
-                                                idPoliza=nIdPoliza,
-            )
-            session.add(nuevo_polizaSeg)    
-            session.commit() 
-        except Exception as e:
-            print(f"Error en polizaSegDAO guardar(): {e}")
-        session.close()
+    #     med=medida
+    #     nIdPoliza=newIdPoliza
+    #     try:
+    #         nuevo_polizaSeg=poliza_Seguridad(idMedidaSeguridad=med,
+    #                                             idPoliza=nIdPoliza,
+    #         )
+    #         session.add(nuevo_polizaSeg)    
+    #         session.commit() 
+    #     except Exception as e:
+    #         print(f"Error en polizaSegDAO guardar(): {e}")
+    #     session.close()
         
     def ulimo_id(self):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
@@ -529,24 +529,24 @@ class cuotaDAO():
         session.close()
         return id
     
-    def guardar(self,newIdPoliza,newNro,newCuota_time,newDes,newPrim,newImpo):
-        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
-        Session = sessionmaker(engine)
-        session = Session()
+    # def guardar(self,newIdPoliza,newNro,newCuota_time,newDes,newPrim,newImpo):
+    #     engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+    #     Session = sessionmaker(engine)
+    #     session = Session()
         
-        try:
-            nueva_cuota = cuotas(idPoliza=newIdPoliza,
-                                    cuotaNro=newNro,
-                                    fechaVencimiento=newCuota_time,
-                                    descuento=newDes,
-                                    premio=newPrim,
-                                    importeFinal=newImpo
-                )
-            session.add(nueva_cuota)
-            session.commit()
-        except Exception as e:
-            print(f"Error en cuotaDAO guardar(): {e}")
-        session.close()
+    #     try:
+    #         nueva_cuota = cuotas(idPoliza=newIdPoliza,
+    #                                 cuotaNro=newNro,
+    #                                 fechaVencimiento=newCuota_time,
+    #                                 descuento=newDes,
+    #                                 premio=newPrim,
+    #                                 importeFinal=newImpo
+    #             )
+    #         session.add(nueva_cuota)
+    #         session.commit()
+    #     except Exception as e:
+    #         print(f"Error en cuotaDAO guardar(): {e}")
+    #     session.close()
 
 class vehiculoDAO():
     def ulimo_id(self):
@@ -564,26 +564,26 @@ class vehiculoDAO():
         session.close()
         return id
     
-    def guardar(self,newPatente,newIdModelo,newIdSini,newIdFactor,newAnioVehiculo,newKilometrosAnio,newChasis,newMotor):
-        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
-        Session = sessionmaker(engine)
-        session = Session()
+    # def guardar(self,newPatente,newIdModelo,newIdSini,newIdFactor,newAnioVehiculo,newKilometrosAnio,newChasis,newMotor):
+    #     engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+    #     Session = sessionmaker(engine)
+    #     session = Session()
         
-        try:
-            nuevo_vehiculo = vehiculo(patente=newPatente,
-                                        idModelo=newIdModelo,
-                                        idSiniestros=newIdSini,
-                                        idFactorKm=newIdFactor,
-                                        anioVehiculo=int(newAnioVehiculo),
-                                        kilometrosAnio=int(newKilometrosAnio),
-                                        chasis=newChasis,
-                                        motor=newMotor
-            )
-            session.add(nuevo_vehiculo)
-            session.commit()
-        except Exception as e:
-            print(f"Error en vehiculoDAO guardar(): {e}")
-        session.close()  
+    #     try:
+    #         nuevo_vehiculo = vehiculo(patente=newPatente,
+    #                                     idModelo=newIdModelo,
+    #                                     idSiniestros=newIdSini,
+    #                                     idFactorKm=newIdFactor,
+    #                                     anioVehiculo=int(newAnioVehiculo),
+    #                                     kilometrosAnio=int(newKilometrosAnio),
+    #                                     chasis=newChasis,
+    #                                     motor=newMotor
+    #         )
+    #         session.add(nuevo_vehiculo)
+    #         session.commit()
+    #     except Exception as e:
+    #         print(f"Error en vehiculoDAO guardar(): {e}")
+    #     session.close()  
         
     def buscar_vehiculo(self, polizaDTO: polizaDTO):
         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
@@ -640,31 +640,31 @@ class factorKmDAO():
         session.close()
         return factor.factorKm
     
-class registroFactoresDAO():
-    def guardar(self,newIdPoliza, newFactorTipo, newFactorSini, newFactorGar, newFactorAla, newFactorRas, newFactorTue, newFactorHijo, newFactorMode, newFactorKilm, newFactorLoca, newFactorProv):
-        engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
-        Session = sessionmaker(engine)
-        session = Session()
+# class registroFactoresDAO():
+#     def guardar(self,newIdPoliza, newFactorTipo, newFactorSini, newFactorGar, newFactorAla, newFactorRas, newFactorTue, newFactorHijo, newFactorMode, newFactorKilm, newFactorLoca, newFactorProv):
+#         engine = create_engine('sqlite:///datosAseguradora.db', echo=True)
+#         Session = sessionmaker(engine)
+#         session = Session()
         
-        try:
-            nuevo_registro = registroFactores(idPoliza=newIdPoliza,
-                                                factorCobertura=newFactorTipo,
-                                                siniestro=newFactorSini,
-                                                segGarage=newFactorGar,
-                                                segAlarma=newFactorAla,
-                                                segRastreo=newFactorRas,
-                                                segTuerca=newFactorTue,
-                                                cantHijos=newFactorHijo,
-                                                estRoboModelo=newFactorMode,
-                                                kilometraje=newFactorKilm,
-                                                riesgoLocalidad=newFactorLoca,
-                                                riesgoProvincia=newFactorProv
-            )
-            session.add(nuevo_registro)
-            session.commit()
-        except Exception as e:
-            print(f"Error en vehiculoDAO guardar(): {e}")
-        session.close() 
+#         try:
+#             nuevo_registro = registroFactores(idPoliza=newIdPoliza,
+#                                                 factorCobertura=newFactorTipo,
+#                                                 siniestro=newFactorSini,
+#                                                 segGarage=newFactorGar,
+#                                                 segAlarma=newFactorAla,
+#                                                 segRastreo=newFactorRas,
+#                                                 segTuerca=newFactorTue,
+#                                                 cantHijos=newFactorHijo,
+#                                                 estRoboModelo=newFactorMode,
+#                                                 kilometraje=newFactorKilm,
+#                                                 riesgoLocalidad=newFactorLoca,
+#                                                 riesgoProvincia=newFactorProv
+#             )
+#             session.add(nuevo_registro)
+#             session.commit()
+#         except Exception as e:
+#             print(f"Error en vehiculoDAO guardar(): {e}")
+#         session.close() 
     
 class tipoCoberturaDAO():
     def buscarFactor(self,filtro):

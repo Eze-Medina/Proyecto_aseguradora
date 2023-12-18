@@ -5,7 +5,7 @@ from sqlalchemy.sql.functions import coalesce
 
 from datetime import datetime
 from data.modelDAO import clienteDAO, provinciaDAO, marcaDAO, localidaDAO, modeloDAO, estadoCivilDAO, factorKmDAO, medidaDeSeguridadDAO
-from data.modelDAO import cantSiniestrosDAO, hijoDAO, polizaDAO, cuotaDAO, vehiculoDAO, cambioEstadoDAO, tipoCoberturaDAO, factorUniDAO
+from data.modelDAO import cantSiniestrosDAO, hijoDAO, polizaDAO, cuotaDAO, vehiculoDAO, tipoCoberturaDAO, factorUniDAO ,cambioEstadoDAO
 from model.modelDTO import ClienteDTO, ProvinciaDTO, MarcaDTO, LocalidadDTO, modeloDTO
 from model.modelDTO import estadoCivilDTO, cantSiniestrosDTO, polizaDTO
 from model.models import cuotas, poliza, registroFactores, cliente
@@ -421,12 +421,12 @@ class GestorPoliza:
                 new_importe=900
                 
                 if polizaDTO.formaPago=="Semestral":
-                    new_poliza.cuotas=cuotas(cuotaNro = 1,
+                    new_poliza.cuotas=[cuotas(cuotaNro = 1,
                                                 fechaVencimiento = cuota_time,
                                                 premio = new_premio,
                                                 descuento = new_descuento,
                                                 importeFinal = new_importe
-                                        )
+                                        )]
                     
                 elif polizaDTO.formaPago=="Mensual":
                 
@@ -534,7 +534,7 @@ class GestorPoliza:
                     pass
                 if lista != []:
                     for vehiculo in lista:
-                        poliza_encontrada = polizaDao.comprobar_existencia(vehiculo.idVehiculo)
+                        poliza_encontrada = polizaDao.comprobar_existencia(vehiculo.idPoliza)
                         if poliza_encontrada is not None:
                             if contador == 1:
                                 return "Vehiculo con poliza vigente - Revisar Patente"

@@ -233,11 +233,31 @@ class Ingreso_datos_poliza():
                 self.interfaz.txtKilometrosAnio.text() != "" and
                 self.interfaz.cbNumeroSiniestros.currentIndex()!= 0
                 ):
-                    print("FUNCO LA VERIFICACION")
                     return True
         except Exception as e:
             print(f"Error en verificacion: {e}")
-    
+            
+    def verificar_len(self):
+        len_invalido = [0,0,0]
+        
+        if not (len(self.interfaz.txtMotor.text()) <= 50):
+            len_invalido[0] = 1
+        if not (len(self.interfaz.txtChasis.text()) <= 50):
+            len_invalido[1] = 1
+        if not (len(self.interfaz.txtPatente.text()) <= 50):
+            len_invalido[2] = 1
+        
+        if (all(elemento == 0 for elemento in len_invalido) == True):
+            return True
+        else:
+            if len_invalido[0] == 1:
+                self.aviso=Aviso(self,'El motor debe contener 50 caracteres o menos')
+            if len_invalido[1] == 1:
+                self.aviso=Aviso(self,'El Chasis debe contener 50 caracteres o menos')
+            if len_invalido[2] == 1:
+                self.aviso=Aviso(self,'La Patente debe contener 50 caracteres o menos')
+            return False
+          
     def verificar_datos_hijos(self):
         incorrecto = [0 ,0, 0, 0]
         
@@ -320,16 +340,19 @@ class Ingreso_datos_poliza():
 
     def IngSeleccionTipo(self):
         try:
-            if self.verificar():
+            if self.verificar() and self.verificar_len():
                 self.recuperarDatosPoliza()
                 self.seleccion_tipo_poliza = Seleccion_tipo_poliza(self,self.datosCliente,self.datosPoliza)
                 self.interfaz.hide()
             else:
-                try:
-                    self.aviso=Aviso(self,'Completar los datos por favor')
-                except Exception as e:
-                    print(f"Error: {e}")   
-                    self.aviso=Aviso(self,f'Error: {e}')
+                if self.verificar_len():
+                    try:
+                        self.aviso=Aviso(self,'Completar los datos por favor')
+                    except Exception as e:
+                        print(f"Error: {e}")   
+                        self.aviso=Aviso(self,f'Error: {e}')
+                else:
+                    pass
         except Exception as e:
             print(f"Error: {e}")
 
