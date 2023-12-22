@@ -415,6 +415,7 @@ class polizaDAO():
                     poliza.idPoliza == idPoliza,
                     poliza.estadoPoliza != "Suspendida"
                 )).first()
+            print(f'poliza_encontrada')
             return poliza_encontrada
             
         except Exception as e:

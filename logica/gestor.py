@@ -230,16 +230,25 @@ class GestorCliente:
             print(f"{primeraPoliza}____{existeSini}____{existeImpago}____{existeIncont}")
             if primeraPoliza:
                 newIdEstado=3
-                poliza.cliente.cambioEstado = cambioEstado(idEstado=newIdEstado,
-                                                            fechaCambio=fechaActual)
+                nuevo_cambio = cambioEstado(idEstado=newIdEstado,
+                                        idCliente=cliente_encontrado.idCliente,
+                                        fechaCambio=fechaActual
+                )
+                cambioEstDao.guardar(nuevo_cambio)
             elif (existeSini or existeImpago or existeIncont):
                 newIdEstado=3
-                poliza.cliente.cambioEstado = cambioEstado(idEstado=newIdEstado,
-                                                            fechaCambio=fechaActual)
+                nuevo_cambio = cambioEstado(idEstado=newIdEstado,
+                                        idCliente=cliente_encontrado.idCliente,
+                                        fechaCambio=fechaActual
+                )
+                cambioEstDao.guardar(nuevo_cambio)
             else:
                 newIdEstado=4
-                poliza.cliente.cambioEstado = cambioEstado(idEstado=newIdEstado,
-                                                            fechaCambio=fechaActual)
+                nuevo_cambio = cambioEstado(idEstado=newIdEstado,
+                                        idCliente=cliente_encontrado.idCliente,
+                                        fechaCambio=fechaActual
+                )
+                cambioEstDao.guardar(nuevo_cambio)
         except Exception as e:
             print(f"Error en actualizar poliza: {e}")
     
@@ -499,15 +508,13 @@ class GestorPoliza:
             print(f"Error en guardar poliza: {e}")
            
         try:
-            #/////////////////////////////////////--ACTUALIZAR ESTADO--////////////////////////////////////////////
-            
-            gesCliente.actualizarEstado(clienteDTO)
-            
             #/////////////////////////////////////--GUARDAR--////////////////////////////////////////////
             
             polizaDao.guardar(new_poliza)
             
+            #/////////////////////////////////////--ACTUALIZAR ESTADO--////////////////////////////////////////////
             
+            gesCliente.actualizarEstado(clienteDTO)
             
         except Exception as e:
             print(f"Error en guardar poliza(): {e}")
